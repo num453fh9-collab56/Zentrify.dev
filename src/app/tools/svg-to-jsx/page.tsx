@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useToast } from "../../components/toast";
 
 const attrMap: Record<string, string> = {
   class: "className",
@@ -105,7 +106,7 @@ export default function SvgToJsxPage() {
   const [typescript, setTypescript] = useState(true);
   const [removeXmlns, setRemoveXmlns] = useState(true);
   const [propsForSize, setPropsForSize] = useState(true);
-  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const output = useMemo(() => {
     if (!input.trim()) return "";
@@ -119,8 +120,7 @@ export default function SvgToJsxPage() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    toast("Copied to clipboard!");
   };
 
   const svgPreview = useMemo(() => {
@@ -233,7 +233,7 @@ export default function SvgToJsxPage() {
               disabled={!output}
               className="neu-btn px-3 py-1.5 text-xs font-medium text-muted hover:text-success disabled:opacity-30"
             >
-              {copied ? "Copied!" : "Copy"}
+              Copy
             </button>
           </div>
           <div className="code-area w-full h-80 sm:h-96 p-5 text-sm font-mono overflow-auto whitespace-pre-wrap">
@@ -258,37 +258,88 @@ export default function SvgToJsxPage() {
       )}
 
       {/* SEO Article */}
-      <article className="mt-14 neu-card p-8">
-        <h2 className="text-xl font-semibold text-foreground mb-3">
-          Free Online SVG to React JSX Converter
-        </h2>
-        <p className="text-sm text-muted mb-4">
-          Zentrify&apos;s SVG to JSX converter instantly transforms SVG markup
-          into clean React components. All SVG attributes are automatically
-          converted to their JSX equivalents — <code>stroke-width</code> becomes{" "}
-          <code>strokeWidth</code>, <code>class</code> becomes{" "}
-          <code>className</code>, and so on.
-        </p>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          Features
-        </h3>
-        <ul className="text-sm text-muted space-y-1 mb-4 list-disc list-inside">
-          <li>Auto-converts SVG attributes to camelCase JSX</li>
-          <li>Generates TypeScript or JavaScript components</li>
-          <li>Optional width/height props for reusability</li>
-          <li>Removes xmlns attributes (optional)</li>
-          <li>Live SVG preview</li>
-          <li>One-click copy</li>
-        </ul>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          How to Use
-        </h3>
-        <p className="text-sm text-muted">
-          Paste your SVG code into the input panel. The converter automatically
-          generates a React component in real-time. Set your component name,
-          choose TypeScript or JavaScript, and copy the output. No signup
-          required — runs entirely in your browser.
-        </p>
+      <article className="mt-16 max-w-4xl mx-auto space-y-10">
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Free Online SVG to React JSX Converter</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            Zentrify&apos;s SVG to JSX converter instantly transforms SVG markup into clean, reusable
+            React components. All SVG attributes are automatically converted to their JSX camelCase
+            equivalents — <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">stroke-width</code> becomes <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">strokeWidth</code>,{" "}
+            <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">class</code> becomes <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">className</code>,{" "}
+            <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">fill-rule</code> becomes <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">fillRule</code>, and so on.
+          </p>
+          <p className="text-muted leading-relaxed">
+            Stop wasting time manually converting SVG attributes for React. This tool handles icons
+            from Heroicons, Feather, FontAwesome, Figma exports, Illustrator exports, and any other
+            SVG source — instantly and privately in your browser.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Why Convert SVG to JSX?</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            React uses JSX syntax, which requires camelCase attribute names instead of the kebab-case
+            used in standard SVG/HTML. If you paste raw SVG into a React component, you&apos;ll get
+            errors and warnings. Converting SVG to JSX gives you:
+          </p>
+          <ul className="text-muted space-y-2 list-disc list-inside">
+            <li><strong className="text-foreground">No console warnings</strong> — all attributes use correct JSX naming conventions</li>
+            <li><strong className="text-foreground">Reusable components</strong> — wrap your SVG in a proper React component with props</li>
+            <li><strong className="text-foreground">TypeScript support</strong> — get typed components with SVGProps for full IntelliSense</li>
+            <li><strong className="text-foreground">Dynamic icons</strong> — pass color, size, and className as props for flexible usage</li>
+            <li><strong className="text-foreground">Tree-shakeable</strong> — import only the icons you use, unlike icon font libraries</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Features</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Auto camelCase</h3>
+              <p className="text-sm text-muted">Automatically converts all SVG attributes like stroke-width, fill-opacity, clip-path to their JSX equivalents.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">TypeScript &amp; JavaScript</h3>
+              <p className="text-sm text-muted">Generate typed React.FC components with SVGProps for TypeScript, or plain function components for JavaScript.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Size Props</h3>
+              <p className="text-sm text-muted">Optionally add width and height props so you can resize the icon dynamically from the parent component.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Live SVG Preview</h3>
+              <p className="text-sm text-muted">See a live visual preview of your SVG as you paste it — verify the icon looks correct before converting.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
+          <ol className="text-muted space-y-3 list-decimal list-inside">
+            <li><strong className="text-foreground">Paste SVG</strong> — copy SVG code from Figma, Illustrator, Heroicons, or any source</li>
+            <li><strong className="text-foreground">Name your component</strong> — set a custom name like &quot;ArrowIcon&quot; or &quot;Logo&quot;</li>
+            <li><strong className="text-foreground">Choose options</strong> — TypeScript/JavaScript, size props, xmlns removal</li>
+            <li><strong className="text-foreground">Copy output</strong> — the React component is generated instantly, ready to paste into your project</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Which SVG attributes get converted?</h3>
+              <p className="text-sm text-muted">All kebab-case attributes are converted to camelCase: stroke-width, fill-rule, clip-path, font-size, text-anchor, and many more. The class attribute becomes className, and for becomes htmlFor.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Does it work with Figma SVG exports?</h3>
+              <p className="text-sm text-muted">Yes! Figma exports include extra attributes and xmlns declarations. This converter cleans them up and produces minimal, React-ready components.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Can I use this with Next.js?</h3>
+              <p className="text-sm text-muted">Absolutely. The generated components work perfectly in Next.js, Remix, Gatsby, Vite, or any React-based framework. For TypeScript projects, choose the TypeScript output option.</p>
+            </div>
+          </div>
+        </section>
       </article>
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "../../components/toast";
 
 type Tab = "glass" | "gradient";
 
@@ -11,7 +12,7 @@ interface GradientStop {
 
 export default function CssGeneratorPage() {
   const [tab, setTab] = useState<Tab>("glass");
-  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   // Glass state
   const [blur, setBlur] = useState(12);
@@ -61,8 +62,7 @@ border-radius: 16px;`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(currentCSS);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    toast("CSS copied to clipboard!");
   };
 
   const updateStop = (index: number, field: keyof GradientStop, value: string | number) => {
@@ -244,7 +244,7 @@ border-radius: 16px;`;
             onClick={handleCopy}
             className="neu-btn px-4 py-1.5 text-xs font-medium text-purple hover:text-primary"
           >
-            {copied ? "Copied!" : "Copy CSS"}
+            Copy CSS
           </button>
         </div>
         <pre className="code-area p-4 text-sm font-mono whitespace-pre-wrap overflow-auto">
@@ -253,34 +253,98 @@ border-radius: 16px;`;
       </div>
 
       {/* SEO Article */}
-      <article className="mt-14 neu-card p-8">
-        <h2 className="text-xl font-semibold text-foreground mb-3">
-          Free CSS Glassmorphism &amp; Gradient Generator
-        </h2>
-        <p className="text-sm text-muted mb-4">
-          Create stunning glassmorphism effects and CSS gradients with
-          Zentrify&apos;s free visual generator. Adjust blur, opacity, colors,
-          and gradient angles with live preview — then copy the generated CSS
-          code directly into your project.
-        </p>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          What is Glassmorphism?
-        </h3>
-        <p className="text-sm text-muted mb-4">
-          Glassmorphism is a modern UI design trend featuring frosted glass
-          effects using CSS backdrop-filter. It creates translucent surfaces
-          with background blur, giving depth and elegance to cards, modals,
-          and navigation bars.
-        </p>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          How to Use
-        </h3>
-        <p className="text-sm text-muted">
-          Switch between Glassmorphism and Gradient tabs, adjust the controls,
-          and see the live preview update instantly. When you&apos;re happy with
-          the result, click &quot;Copy CSS&quot; to copy the code. No signup
-          required — everything runs in your browser.
-        </p>
+      <article className="mt-16 max-w-4xl mx-auto space-y-10">
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Free CSS Glassmorphism &amp; Gradient Generator</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            Create stunning glassmorphism effects and CSS gradients with Zentrify&apos;s free visual
+            generator. Adjust blur, opacity, colors, and gradient angles with real-time live preview —
+            then copy the production-ready CSS code directly into your project. No frameworks needed,
+            works with vanilla CSS, Tailwind, React, Vue, or any stack.
+          </p>
+          <p className="text-muted leading-relaxed">
+            Everything runs in your browser — no signup, no data collection, no rate limits.
+            Perfect for designers and frontend developers who want pixel-perfect glass effects
+            without writing CSS from scratch.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">What is Glassmorphism?</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            Glassmorphism is a modern UI design trend that creates frosted glass surfaces using
+            CSS <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">backdrop-filter: blur()</code> combined
+            with semi-transparent backgrounds. Popularized by Apple&apos;s macOS and iOS interfaces,
+            glassmorphism adds depth, hierarchy, and elegance to any web design.
+          </p>
+          <p className="text-muted leading-relaxed">
+            The key CSS properties involved are <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">backdrop-filter</code> for
+            the blur effect, <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">background: rgba()</code> for
+            transparency, and a subtle border for the glass edge. This generator handles all of
+            that for you — just move the sliders.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Features</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Glassmorphism Mode</h3>
+              <p className="text-sm text-muted">Control blur intensity, background opacity, border radius, and border opacity to create perfect frosted glass cards.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Gradient Mode</h3>
+              <p className="text-sm text-muted">Pick two colors, adjust the angle, and generate smooth CSS gradients for backgrounds, buttons, and text effects.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Live Preview</h3>
+              <p className="text-sm text-muted">See your changes in real time as you adjust sliders — no need to copy-paste and refresh to check results.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">One-Click Copy</h3>
+              <p className="text-sm text-muted">Copy the generated CSS with a single click. The code is clean, formatted, and ready for production use.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
+          <ol className="text-muted space-y-3 list-decimal list-inside">
+            <li><strong className="text-foreground">Choose a mode</strong> — switch between Glassmorphism and Gradient tabs at the top</li>
+            <li><strong className="text-foreground">Adjust controls</strong> — use sliders to fine-tune blur, opacity, colors, and angles</li>
+            <li><strong className="text-foreground">Preview live</strong> — watch the preview card update instantly as you adjust</li>
+            <li><strong className="text-foreground">Copy CSS</strong> — click the copy button to grab the generated code</li>
+            <li><strong className="text-foreground">Paste in your project</strong> — use it in any CSS file, styled-component, or inline style</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Browser Support for Glassmorphism</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            The <code className="text-sm bg-surface border border-surface-border px-1.5 py-0.5 rounded">backdrop-filter</code> property
+            is supported in all modern browsers including Chrome, Firefox (103+), Safari, and Edge.
+            For older browsers, the glass effect gracefully degrades to a semi-transparent background
+            without the blur — your design still looks good, just without the frosted effect.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Can I use glassmorphism with Tailwind CSS?</h3>
+              <p className="text-sm text-muted">Yes! Tailwind supports backdrop-blur utilities like <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">backdrop-blur-md</code> and <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">bg-white/20</code>. You can use the generated CSS values as reference for your Tailwind classes.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Does glassmorphism affect performance?</h3>
+              <p className="text-sm text-muted">Backdrop-filter can be GPU-intensive on large elements or when layered heavily. For best performance, use it on smaller elements like cards and modals rather than full-page backgrounds.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">What&apos;s the difference between glassmorphism and neumorphism?</h3>
+              <p className="text-sm text-muted">Glassmorphism uses transparent, blurred backgrounds to create a glass effect. Neumorphism uses soft shadows to create an extruded or inset appearance. Both are modern UI trends but achieve very different visual effects.</p>
+            </div>
+          </div>
+        </section>
       </article>
     </div>
   );

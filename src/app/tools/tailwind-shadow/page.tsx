@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "../../components/toast";
 
 interface ShadowLayer {
   x: number;
@@ -44,7 +45,7 @@ function layerToCSS(layer: ShadowLayer): string {
 
 export default function TailwindShadowPage() {
   const [layers, setLayers] = useState<ShadowLayer[]>([{ ...defaultLayer }]);
-  const [copied, setCopied] = useState("");
+  const { toast } = useToast();
   const [outputTab, setOutputTab] = useState<"tailwind" | "css">("tailwind");
 
   const cssValue = layers.map(layerToCSS).join(", ");
@@ -69,10 +70,9 @@ export default function TailwindShadowPage() {
     setLayers(preset.layers.map((l) => ({ ...l })));
   };
 
-  const handleCopy = (text: string, label: string) => {
+  const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    setCopied(label);
-    setTimeout(() => setCopied(""), 2000);
+    toast("Copied to clipboard!");
   };
 
   return (
@@ -203,14 +203,11 @@ export default function TailwindShadowPage() {
           </div>
           <button
             onClick={() =>
-              handleCopy(
-                outputTab === "tailwind" ? tailwindClass : cssCode,
-                outputTab
-              )
+              handleCopy(outputTab === "tailwind" ? tailwindClass : cssCode)
             }
             className="neu-btn px-4 py-1.5 text-xs font-medium text-orange hover:text-primary"
           >
-            {copied === outputTab ? "Copied!" : "Copy"}
+            Copy
           </button>
         </div>
         <pre className="code-area p-4 text-sm font-mono whitespace-pre-wrap overflow-auto break-all">
@@ -219,36 +216,83 @@ export default function TailwindShadowPage() {
       </div>
 
       {/* SEO Article */}
-      <article className="mt-14 neu-card p-8">
-        <h2 className="text-xl font-semibold text-foreground mb-3">
-          Free Tailwind Shadow Generator
-        </h2>
-        <p className="text-sm text-muted mb-4">
-          Create custom box-shadow effects with Zentrify&apos;s visual shadow
-          generator. Adjust offset, blur, spread, color, and opacity with
-          intuitive controls — see the result update live. Get your shadow as a
-          Tailwind CSS arbitrary value class or raw CSS.
-        </p>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          Features
-        </h3>
-        <ul className="text-sm text-muted space-y-1 mb-4 list-disc list-inside">
-          <li>Visual controls with live preview</li>
-          <li>Multiple shadow layers (up to 5)</li>
-          <li>Inset shadow support</li>
-          <li>Tailwind preset shadows (sm, md, lg, xl, 2xl)</li>
-          <li>Output as Tailwind class or raw CSS</li>
-          <li>One-click copy</li>
-        </ul>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          How to Use
-        </h3>
-        <p className="text-sm text-muted">
-          Adjust the sliders to customize your shadow. Use presets for quick
-          Tailwind defaults. Add multiple layers for complex effects. Switch
-          between Tailwind and CSS output tabs, then copy the code. No signup
-          needed — everything runs in your browser.
-        </p>
+      <article className="mt-16 max-w-4xl mx-auto space-y-10">
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Free Tailwind CSS Shadow Generator</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            Design custom box-shadow effects visually with Zentrify&apos;s free shadow generator.
+            Adjust X/Y offset, blur radius, spread, color, and opacity with intuitive sliders —
+            see the result update in real time. Export your shadow as a Tailwind CSS arbitrary
+            value class or raw CSS ready for any project.
+          </p>
+          <p className="text-muted leading-relaxed">
+            Tailwind&apos;s built-in shadow utilities (shadow-sm, shadow-md, shadow-lg) cover common
+            cases, but real-world designs often need custom shadows. This tool lets you create
+            exactly the shadow you need — including multi-layer shadows and inset effects.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Why Custom Shadows Matter</h2>
+          <ul className="text-muted space-y-2 list-disc list-inside">
+            <li><strong className="text-foreground">Depth &amp; hierarchy</strong> — shadows create visual layers that guide users&apos; attention to important elements</li>
+            <li><strong className="text-foreground">Brand consistency</strong> — custom shadows match your design system instead of generic defaults</li>
+            <li><strong className="text-foreground">Micro-interactions</strong> — animated shadows on hover/focus make interfaces feel responsive and polished</li>
+            <li><strong className="text-foreground">Card designs</strong> — the right shadow makes cards feel elevated and clickable</li>
+            <li><strong className="text-foreground">Neumorphism</strong> — combine inset and outset shadows for modern neumorphic UI effects</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Features</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Visual Controls</h3>
+              <p className="text-sm text-muted">Intuitive sliders for X offset, Y offset, blur radius, spread, and opacity — see changes live as you adjust.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Multi-Layer Shadows</h3>
+              <p className="text-sm text-muted">Stack up to 5 shadow layers for complex, realistic depth effects — each layer independently configurable.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Inset Shadows</h3>
+              <p className="text-sm text-muted">Toggle inset mode for inner shadows — perfect for input fields, pressed buttons, and neumorphic designs.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Tailwind &amp; CSS Output</h3>
+              <p className="text-sm text-muted">Get output as Tailwind arbitrary value classes or standard CSS box-shadow — works with any framework.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
+          <ol className="text-muted space-y-3 list-decimal list-inside">
+            <li><strong className="text-foreground">Start with a preset</strong> — choose a Tailwind preset (sm, md, lg, xl, 2xl) or start from scratch</li>
+            <li><strong className="text-foreground">Customize</strong> — adjust offset, blur, spread, color, and opacity with sliders</li>
+            <li><strong className="text-foreground">Add layers</strong> — click &quot;Add Layer&quot; for multi-shadow effects with independent controls</li>
+            <li><strong className="text-foreground">Toggle inset</strong> — switch to inner shadow for pressed or recessed effects</li>
+            <li><strong className="text-foreground">Copy code</strong> — grab the Tailwind class or CSS code with one click</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">How do I use custom shadows in Tailwind?</h3>
+              <p className="text-sm text-muted">Use arbitrary value syntax: <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">shadow-[0_4px_16px_rgba(0,0,0,0.1)]</code>. This generator creates the exact class for you — just paste it into your className.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Can I animate shadows?</h3>
+              <p className="text-sm text-muted">Yes! CSS box-shadow is animatable. Use <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">transition: box-shadow 0.2s</code> for smooth hover effects. In Tailwind, add <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">transition-shadow duration-200</code>.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">What are multi-layer shadows used for?</h3>
+              <p className="text-sm text-muted">Layering shadows creates more realistic depth. A common pattern is a tight, dark shadow for definition plus a wide, light shadow for ambient glow — mimicking real-world lighting.</p>
+            </div>
+          </div>
+        </section>
       </article>
     </div>
   );

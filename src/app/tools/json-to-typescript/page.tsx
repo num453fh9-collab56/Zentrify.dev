@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useToast } from "../../components/toast";
 
 type OutputMode = "typescript" | "zod";
 
@@ -130,11 +131,10 @@ export default function JsonToTypeScriptPage() {
   const [mode, setMode] = useState<OutputMode>("typescript");
   const [exportKw, setExportKw] = useState(true);
   const [readonlyKw, setReadonlyKw] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   const handleConvert = useCallback(() => {
     setError("");
-    setCopied(false);
     try {
       const result = convert(input, rootName || "Root", mode, exportKw, readonlyKw);
       setOutput(result);
@@ -146,8 +146,7 @@ export default function JsonToTypeScriptPage() {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    toast("Copied to clipboard!");
   };
 
   const handlePrettify = () => {
@@ -268,7 +267,7 @@ export default function JsonToTypeScriptPage() {
               disabled={!output}
               className="neu-btn px-3 py-1.5 text-xs font-medium text-muted hover:text-primary disabled:opacity-30"
             >
-              {copied ? "Copied!" : "Copy"}
+              Copy
             </button>
           </div>
           <div className="code-area w-full h-80 sm:h-96 p-5 text-sm font-mono overflow-auto whitespace-pre-wrap">
@@ -292,36 +291,122 @@ export default function JsonToTypeScriptPage() {
       </button>
 
       {/* SEO Article */}
-      <article className="mt-14 neu-card p-8">
-        <h2 className="text-xl font-semibold text-foreground mb-3">
-          Free Online JSON to TypeScript Converter
-        </h2>
-        <p className="text-sm text-muted mb-4">
-          Zentrify&apos;s JSON to TypeScript converter instantly transforms your
-          JSON data into TypeScript interfaces or Zod validation schemas.
-          Perfect for developers who need type-safe code from API responses,
-          config files, or any JSON data source.
-        </p>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          Features
-        </h3>
-        <ul className="text-sm text-muted space-y-1 mb-4 list-disc list-inside">
-          <li>Generate TypeScript interfaces with proper type inference</li>
-          <li>Generate Zod schemas for runtime validation</li>
-          <li>Handle nested objects and arrays recursively</li>
-          <li>Customizable root interface name</li>
-          <li>Optional export and readonly modifiers</li>
-          <li>JSON prettify built-in</li>
-        </ul>
-        <h3 className="text-lg font-semibold text-foreground mb-2">
-          How to Use
-        </h3>
-        <p className="text-sm text-muted">
-          Paste your JSON into the input panel, choose between TypeScript or Zod
-          output, set your options, and click Convert. The generated code
-          appears instantly — copy it to your clipboard with one click. No
-          signup, no server — everything runs in your browser.
-        </p>
+      <article className="mt-16 max-w-4xl mx-auto space-y-10">
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Free Online JSON to TypeScript Converter</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            Zentrify&apos;s JSON to TypeScript converter instantly transforms your JSON data into
+            fully typed TypeScript interfaces or Zod validation schemas. Whether you&apos;re working
+            with REST API responses, configuration files, database records, or any structured JSON,
+            this tool generates clean, production-ready type definitions in seconds.
+          </p>
+          <p className="text-muted leading-relaxed">
+            Unlike other converters, Zentrify runs entirely in your browser — no data is sent to
+            any server, making it safe for proprietary or sensitive data. No signup required, no
+            rate limits, no ads blocking your workflow.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Why Convert JSON to TypeScript?</h2>
+          <p className="text-muted leading-relaxed mb-3">
+            TypeScript&apos;s type system catches bugs at compile time that would otherwise slip
+            into production. When you receive JSON data from an API, database, or third-party
+            service, that data is untyped by default. By generating TypeScript interfaces from
+            your JSON, you get:
+          </p>
+          <ul className="text-muted space-y-2 list-disc list-inside">
+            <li><strong className="text-foreground">Autocomplete &amp; IntelliSense</strong> — your editor knows every field and its type, so you write code faster with fewer mistakes</li>
+            <li><strong className="text-foreground">Compile-time error checking</strong> — access a non-existent property or pass the wrong type? TypeScript catches it before you ship</li>
+            <li><strong className="text-foreground">Self-documenting code</strong> — interfaces serve as living documentation for your data shapes</li>
+            <li><strong className="text-foreground">Refactoring confidence</strong> — rename a field and TypeScript highlights every file that needs updating</li>
+            <li><strong className="text-foreground">Team collaboration</strong> — shared interfaces keep frontend and backend teams aligned</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Features</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">TypeScript Interfaces</h3>
+              <p className="text-sm text-muted">Generate clean interfaces with proper type inference for strings, numbers, booleans, arrays, and nested objects.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Zod Schemas</h3>
+              <p className="text-sm text-muted">Generate Zod validation schemas for runtime type checking — perfect for form validation and API input parsing.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Nested Object Support</h3>
+              <p className="text-sm text-muted">Handles deeply nested objects and arrays recursively, generating separate interfaces for each level.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Export &amp; Readonly</h3>
+              <p className="text-sm text-muted">Toggle export keywords and readonly modifiers to match your project&apos;s coding conventions.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">Custom Root Name</h3>
+              <p className="text-sm text-muted">Set a custom name for the root interface — User, Product, ApiResponse, or anything you need.</p>
+            </div>
+            <div className="neu-card-sm p-4">
+              <h3 className="font-semibold mb-1">JSON Prettifier</h3>
+              <p className="text-sm text-muted">Built-in prettify button formats messy or minified JSON into readable, indented output before converting.</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
+          <ol className="text-muted space-y-3 list-decimal list-inside">
+            <li><strong className="text-foreground">Paste your JSON</strong> — copy JSON from your API response, Postman, or any source and paste it into the input panel</li>
+            <li><strong className="text-foreground">Choose output mode</strong> — select TypeScript for interfaces or Zod for runtime validation schemas</li>
+            <li><strong className="text-foreground">Set options</strong> — customize the root name, toggle export/readonly as needed</li>
+            <li><strong className="text-foreground">Click Convert</strong> — your typed code appears instantly in the output panel</li>
+            <li><strong className="text-foreground">Copy &amp; use</strong> — one-click copy to clipboard, paste directly into your project</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">TypeScript vs Zod: Which Should You Choose?</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border border-surface-border rounded-xl overflow-hidden">
+              <thead>
+                <tr className="bg-surface">
+                  <th className="text-left p-3 font-semibold border-b border-surface-border">Feature</th>
+                  <th className="text-left p-3 font-semibold border-b border-surface-border">TypeScript Interface</th>
+                  <th className="text-left p-3 font-semibold border-b border-surface-border">Zod Schema</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted">
+                <tr><td className="p-3 border-b border-surface-border">Type checking</td><td className="p-3 border-b border-surface-border">Compile-time only</td><td className="p-3 border-b border-surface-border">Compile-time + runtime</td></tr>
+                <tr><td className="p-3 border-b border-surface-border">Validation</td><td className="p-3 border-b border-surface-border">No built-in validation</td><td className="p-3 border-b border-surface-border">Full validation with error messages</td></tr>
+                <tr><td className="p-3 border-b border-surface-border">Bundle size</td><td className="p-3 border-b border-surface-border">Zero (types stripped at build)</td><td className="p-3 border-b border-surface-border">~14KB (Zod library needed)</td></tr>
+                <tr><td className="p-3 border-b border-surface-border">Best for</td><td className="p-3 border-b border-surface-border">Internal code, trusted data</td><td className="p-3 border-b border-surface-border">API inputs, forms, external data</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Is my JSON data safe?</h3>
+              <p className="text-sm text-muted">Yes. Everything runs 100% in your browser. Your JSON is never sent to any server — not even ours. You can verify this by checking the network tab in your browser&apos;s developer tools.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Does it handle nested JSON?</h3>
+              <p className="text-sm text-muted">Yes. The converter recursively processes nested objects and arrays, generating separate interfaces for each nested structure with proper type references.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">Can I convert JSON arrays?</h3>
+              <p className="text-sm text-muted">Yes. If your JSON root is an array, the converter infers the element type from the first item and generates the corresponding interface plus an array type alias.</p>
+            </div>
+            <div className="neu-card-sm p-5">
+              <h3 className="font-semibold mb-2">What about optional fields?</h3>
+              <p className="text-sm text-muted">Currently, all fields are generated as required. For optional fields, you can manually add the ? modifier after conversion. We&apos;re working on auto-detection of optional fields from multiple JSON samples.</p>
+            </div>
+          </div>
+        </section>
       </article>
     </div>
   );
