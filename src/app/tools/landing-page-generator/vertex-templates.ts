@@ -373,10 +373,6 @@ function heroSplitCard(img: string, bgGradient: string, text: string, color: str
   return { img, bg: '', overlayHtml: `<div class="fill" style="background:${bgGradient}"></div><div class="ph" style="top:100px;bottom:0"><img alt="" src="${img}" onerror="this.parentElement.parentElement.classList.add('broken')"><div class="fill" style="background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,0) 30%)"></div></div><div class="cv t-serif" style="top:36px;font-size:17px;color:${color}">${text}</div>` };
 }
 
-// ═══════════════════════════════════════════════════════════════
-// TEMPLATE CONFIGURATIONS
-// ═══════════════════════════════════════════════════════════════
-
 export const vertexTemplates = [
 
   // 1. FITNESS — GymForge

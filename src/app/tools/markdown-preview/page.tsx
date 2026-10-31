@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useToast } from "../../components/toast";
+import { ToolPageHeader } from "../../components/tool-page-header";
 
 const sampleMd = `# Hello World
 
@@ -120,16 +121,9 @@ export default function MarkdownPreviewPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-            Markdown Preview
-          </h1>
-          <p className="text-muted text-lg">
-            Write Markdown, see live rendered preview.
-          </p>
-        </div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-10 sm:pb-14">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 gap-4">
+        <ToolPageHeader />
         <div className="flex gap-2">
           <div className="neu-card p-1 flex rounded-lg">
             <button
@@ -178,40 +172,9 @@ export default function MarkdownPreviewPage() {
           />
         </div>
       </div>
-      {/* SEO Article */}
-      <article className="mt-16 max-w-4xl mx-auto space-y-10">
+      <div className="mt-14 max-w-4xl mx-auto space-y-12">
         <section>
-          <h2 className="text-2xl font-bold mb-4">Free Online Markdown Preview &amp; Editor</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            Write Markdown and see a beautifully rendered live preview side by side with Zentrify&apos;s
-            free Markdown editor. Supports all standard Markdown syntax including headings, bold,
-            italic, links, images, code blocks, tables, blockquotes, and lists. Copy the generated
-            HTML output with one click.
-          </p>
-          <p className="text-muted leading-relaxed">
-            Perfect for writing README files, documentation, blog posts, GitHub issues, and any
-            content that uses Markdown formatting. Everything runs in your browser — your text
-            is never sent to any server.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">What is Markdown?</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            Markdown is a lightweight markup language created by John Gruber in 2004. It uses simple
-            text formatting syntax that converts to HTML. Markdown is the standard for documentation
-            on GitHub, GitLab, Stack Overflow, Reddit, Discord, Notion, and many other platforms.
-          </p>
-          <ul className="text-muted space-y-2 list-disc list-inside">
-            <li><strong className="text-foreground">Easy to learn</strong> — simple syntax like # for headings, ** for bold, * for italic</li>
-            <li><strong className="text-foreground">Readable as plain text</strong> — Markdown files look clean even without rendering</li>
-            <li><strong className="text-foreground">Universal support</strong> — used on GitHub, VS Code, Notion, Slack, and thousands of platforms</li>
-            <li><strong className="text-foreground">Version control friendly</strong> — plain text diffs cleanly in Git, unlike Word documents</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Supported Syntax</h2>
+          <h2 className="text-xl font-semibold tracking-tight mb-4">Supported Syntax</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="neu-card-sm p-4">
               <h3 className="font-semibold mb-1">Text Formatting</h3>
@@ -233,7 +196,7 @@ export default function MarkdownPreviewPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-4">Markdown Cheat Sheet</h2>
+          <h2 className="text-xl font-semibold tracking-tight mb-4">Markdown Cheat Sheet</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border border-surface-border rounded-xl overflow-hidden">
               <thead>
@@ -253,25 +216,7 @@ export default function MarkdownPreviewPage() {
             </table>
           </div>
         </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Can I copy the HTML output?</h3>
-              <p className="text-sm text-muted">Yes! Switch to the HTML tab above the preview to see the raw HTML, then click Copy to grab it. Use it in emails, CMS editors, or any platform that accepts HTML.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Does it support GitHub Flavored Markdown?</h3>
-              <p className="text-sm text-muted">This tool supports standard Markdown plus tables, strikethrough, and fenced code blocks — the most commonly used GFM extensions. Task lists and autolinks are planned for future updates.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Is my content saved?</h3>
-              <p className="text-sm text-muted">No. Everything runs in your browser session. When you close the tab, your content is gone. For persistent storage, copy your Markdown to a .md file in your project.</p>
-            </div>
-          </div>
-        </section>
-      </article>
+      </div>
     </div>
   );
 }

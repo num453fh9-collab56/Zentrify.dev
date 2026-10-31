@@ -1,557 +1,576 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { HeroBackground } from "./components/hero-background";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo } from "react";
+import {
+  Braces,
+  Paintbrush,
+  Image,
+  Sparkles,
+  Search,
+  ArrowUpDown,
+  Palette,
+  FileText,
+  Globe,
+  Lock,
+  Fingerprint,
+  Type,
+  Clock,
+  Code2,
+  Hash,
+  Minimize2,
+  ImagePlus,
+  GitCompare,
+  Zap,
+  MonitorSmartphone,
+  Heart,
+  Laptop,
+  ArrowRight,
+  SearchX,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { HeroDemo } from "./components/hero-demo";
+import { ToolPreview } from "./components/tool-previews";
 
-const tools = [
+const categories = [
+  { id: "all", label: "All Tools" },
+  { id: "developer", label: "Developer" },
+  { id: "design", label: "Design" },
+  { id: "text", label: "Text & Data" },
+  { id: "security", label: "Security" },
+  { id: "converter", label: "Converters" },
+];
+
+type ToolItem = {
+  name: string;
+  description: string;
+  href: string;
+  color: string;
+  iconBg: string;
+  borderColor: string;
+  glowClass: string;
+  gradient: string;
+  category: string;
+  badge?: string;
+  Icon: LucideIcon;
+};
+
+const tools: ToolItem[] = [
   {
-    name: "JSON → TypeScript",
-    description:
-      "Convert JSON to TypeScript interfaces or Zod schemas instantly.",
+    name: "JSON to TypeScript",
+    description: "Convert JSON to TypeScript interfaces or Zod schemas instantly.",
     href: "/tools/json-to-typescript",
     color: "text-primary",
     iconBg: "bg-primary/10",
     borderColor: "border-t-primary",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
-      </svg>
-    ),
+    glowClass: "premium-card-primary",
+    gradient: "from-primary to-accent",
+    category: "converter",
+    badge: "Popular",
+    Icon: Braces,
   },
   {
     name: "CSS Generator",
-    description:
-      "Generate glassmorphism effects and gradient CSS with live preview.",
+    description: "Generate glassmorphism effects and gradient CSS with live preview.",
     href: "/tools/css-generator",
     color: "text-purple",
     iconBg: "bg-purple/10",
     borderColor: "border-t-purple",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
-      </svg>
-    ),
+    glowClass: "premium-card-purple",
+    gradient: "from-purple to-pink",
+    category: "design",
+    badge: "Popular",
+    Icon: Paintbrush,
   },
   {
-    name: "SVG → JSX",
-    description:
-      "Convert SVG markup to React JSX components with proper attributes.",
+    name: "SVG to JSX",
+    description: "Convert SVG markup to React JSX components with proper attributes.",
     href: "/tools/svg-to-jsx",
     color: "text-success",
     iconBg: "bg-success/10",
     borderColor: "border-t-success",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
-      </svg>
-    ),
+    glowClass: "premium-card-success",
+    gradient: "from-success to-accent",
+    category: "converter",
+    Icon: Image,
   },
   {
     name: "Shadow Generator",
-    description:
-      "Create custom Tailwind box-shadows with visual controls and live preview.",
+    description: "Create custom Tailwind box-shadows with visual controls and live preview.",
     href: "/tools/tailwind-shadow",
     color: "text-orange",
     iconBg: "bg-orange/10",
     borderColor: "border-t-orange",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-      </svg>
-    ),
+    glowClass: "premium-card-orange",
+    gradient: "from-orange to-warning",
+    category: "design",
+    Icon: Sparkles,
   },
   {
     name: "Regex Tester",
-    description:
-      "Test and debug regular expressions with real-time matching and capture groups.",
+    description: "Test and debug regular expressions with real-time matching and capture groups.",
     href: "/tools/regex-tester",
     color: "text-error",
     iconBg: "bg-error/10",
     borderColor: "border-t-error",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-      </svg>
-    ),
+    glowClass: "premium-card-error",
+    gradient: "from-error to-pink",
+    category: "developer",
+    Icon: Search,
   },
   {
     name: "Base64 Encoder",
-    description:
-      "Encode text to Base64 or decode Base64 back to text. UTF-8 supported.",
+    description: "Encode text to Base64 or decode Base64 back to text. UTF-8 supported.",
     href: "/tools/base64-encoder",
     color: "text-accent",
     iconBg: "bg-accent/10",
     borderColor: "border-t-accent",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75l3 3m0 0l3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75" />
-      </svg>
-    ),
+    glowClass: "premium-card-accent",
+    gradient: "from-accent to-primary",
+    category: "converter",
+    Icon: ArrowUpDown,
   },
   {
     name: "Color Palette",
-    description:
-      "Generate shades, tints and harmonies from any color. Export as CSS or Tailwind.",
+    description: "Generate shades, tints and harmonies from any color. Export as CSS or Tailwind.",
     href: "/tools/color-palette",
     color: "text-pink",
     iconBg: "bg-pink/10",
     borderColor: "border-t-pink",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
-      </svg>
-    ),
+    glowClass: "premium-card-pink",
+    gradient: "from-pink to-purple",
+    category: "design",
+    Icon: Palette,
   },
   {
     name: "Markdown Preview",
-    description:
-      "Write Markdown and see live rendered preview. Copy HTML output.",
+    description: "Write Markdown and see live rendered preview. Copy HTML output.",
     href: "/tools/markdown-preview",
     color: "text-warning",
     iconBg: "bg-warning/10",
     borderColor: "border-t-warning",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-      </svg>
-    ),
+    glowClass: "premium-card-warning",
+    gradient: "from-warning to-orange",
+    category: "text",
+    Icon: FileText,
   },
   {
     name: "Landing Pages",
-    description:
-      "500+ free landing page templates with HTML/CSS code. Preview, customize, copy.",
+    description: "60+ free landing page templates, including hand-picked premium designs. Preview, copy or download.",
     href: "/tools/landing-page-generator",
     color: "text-primary",
     iconBg: "bg-primary/10",
     borderColor: "border-t-primary",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-      </svg>
-    ),
+    glowClass: "premium-card-primary",
+    gradient: "from-primary to-purple",
+    category: "design",
+    Icon: Globe,
   },
   {
     name: "Password Generator",
-    description:
-      "Generate strong, random passwords with customizable length and character options.",
+    description: "Generate strong, random passwords with customizable length and character options.",
     href: "/tools/password-generator",
     color: "text-success",
     iconBg: "bg-success/10",
     borderColor: "border-t-success",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-      </svg>
-    ),
+    glowClass: "premium-card-success",
+    gradient: "from-success to-accent",
+    category: "security",
+    badge: "New",
+    Icon: Lock,
+  },
+  {
+    name: "UUID Generator",
+    description: "Generate random UUID v4 strings with bulk generation and format options.",
+    href: "/tools/uuid-generator",
+    color: "text-purple",
+    iconBg: "bg-purple/10",
+    borderColor: "border-t-purple",
+    glowClass: "premium-card-purple",
+    gradient: "from-purple to-accent",
+    category: "developer",
+    badge: "New",
+    Icon: Fingerprint,
+  },
+  {
+    name: "Lorem Ipsum",
+    description: "Generate placeholder text by paragraphs, sentences, or words for your designs.",
+    href: "/tools/lorem-ipsum-generator",
+    color: "text-pink",
+    iconBg: "bg-pink/10",
+    borderColor: "border-t-pink",
+    glowClass: "premium-card-pink",
+    gradient: "from-pink to-error",
+    category: "text",
+    badge: "New",
+    Icon: Type,
+  },
+  {
+    name: "Timestamp Converter",
+    description: "Convert Unix timestamps to human-readable dates and vice versa.",
+    href: "/tools/timestamp-converter",
+    color: "text-warning",
+    iconBg: "bg-warning/10",
+    borderColor: "border-t-warning",
+    glowClass: "premium-card-warning",
+    gradient: "from-warning to-orange",
+    category: "converter",
+    badge: "New",
+    Icon: Clock,
+  },
+  {
+    name: "JSON Formatter",
+    description: "Format, validate, and minify JSON data with customizable indentation.",
+    href: "/tools/json-formatter",
+    color: "text-primary",
+    iconBg: "bg-primary/10",
+    borderColor: "border-t-primary",
+    glowClass: "premium-card-primary",
+    gradient: "from-primary to-success",
+    category: "developer",
+    badge: "New",
+    Icon: Code2,
+  },
+  {
+    name: "Hash Generator",
+    description: "Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text instantly.",
+    href: "/tools/hash-generator",
+    color: "text-error",
+    iconBg: "bg-error/10",
+    borderColor: "border-t-error",
+    glowClass: "premium-card-error",
+    gradient: "from-error to-orange",
+    category: "security",
+    badge: "New",
+    Icon: Hash,
+  },
+  {
+    name: "Code Minifier",
+    description: "Minify HTML, CSS, and JavaScript code to reduce file size instantly.",
+    href: "/tools/code-minifier",
+    color: "text-orange",
+    iconBg: "bg-orange/10",
+    borderColor: "border-t-orange",
+    glowClass: "premium-card-orange",
+    gradient: "from-orange to-error",
+    category: "developer",
+    badge: "New",
+    Icon: Minimize2,
+  },
+  {
+    name: "Image to Base64",
+    description: "Convert images to Base64 encoded strings with drag-and-drop upload.",
+    href: "/tools/image-to-base64",
+    color: "text-accent",
+    iconBg: "bg-accent/10",
+    borderColor: "border-t-accent",
+    glowClass: "premium-card-accent",
+    gradient: "from-accent to-success",
+    category: "converter",
+    badge: "New",
+    Icon: ImagePlus,
+  },
+  {
+    name: "Text Diff Checker",
+    description: "Compare two texts and see differences highlighted line by line.",
+    href: "/tools/text-diff-checker",
+    color: "text-success",
+    iconBg: "bg-success/10",
+    borderColor: "border-t-success",
+    glowClass: "premium-card-success",
+    gradient: "from-success to-primary",
+    category: "text",
+    badge: "New",
+    Icon: GitCompare,
   },
 ];
 
-const codeLines = [
-  { text: "const ", cls: "code-keyword" },
-  { text: "devTools", cls: "code-variable" },
-  { text: " = {", cls: "code-punctuation" },
-  { text: "\n" },
-  { text: "  convert", cls: "code-variable" },
-  { text: ": ", cls: "code-punctuation" },
-  { text: "'JSON → TypeScript'", cls: "code-string" },
-  { text: ",", cls: "code-punctuation" },
-  { text: "\n" },
-  { text: "  generate", cls: "code-variable" },
-  { text: ": ", cls: "code-punctuation" },
-  { text: "'CSS & Shadows'", cls: "code-string" },
-  { text: ",", cls: "code-punctuation" },
-  { text: "\n" },
-  { text: "  transform", cls: "code-variable" },
-  { text: ": ", cls: "code-punctuation" },
-  { text: "'SVG → React JSX'", cls: "code-string" },
-  { text: ",", cls: "code-punctuation" },
-  { text: "\n" },
-  { text: "  cost", cls: "code-variable" },
-  { text: ": ", cls: "code-punctuation" },
-  { text: "'free forever'", cls: "code-string" },
-  { text: ",", cls: "code-punctuation" },
-  { text: "\n" },
-  { text: "}", cls: "code-punctuation" },
-  { text: " ", cls: "" },
-  { text: "// 🚀 ship faster", cls: "code-comment" },
+const whyFeatures = [
+  {
+    title: "Runs in your browser",
+    description: "Your code, text and files are processed on your device and never uploaded.",
+    Icon: Laptop,
+  },
+  {
+    title: "Instant results",
+    description: "No waiting on a server. Output updates as you type or paste.",
+    Icon: Zap,
+  },
+  {
+    title: "Free, no signup",
+    description: "Every tool is free to use. No account, no paywall, no limits.",
+    Icon: Heart,
+  },
+  {
+    title: "Works on any device",
+    description: "Built to work on phones, tablets and desktops alike.",
+    Icon: MonitorSmartphone,
+  },
 ];
 
-function useTypingEffect(tokens: typeof codeLines, speed = 30) {
-  const [displayed, setDisplayed] = useState<typeof codeLines>([]);
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
-  useEffect(() => {
-    let tokenIndex = 0;
-    let charIndex = 0;
-    const current: typeof codeLines = [];
+const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
-    const interval = setInterval(() => {
-      if (tokenIndex >= tokens.length) {
-        clearInterval(interval);
-        return;
-      }
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
+};
 
-      const token = tokens[tokenIndex];
-      if (token.text === "\n") {
-        current.push(token);
-        tokenIndex++;
-        charIndex = 0;
-      } else {
-        if (charIndex === 0) {
-          current.push({ text: "", cls: token.cls });
-        }
-        current[current.length - 1] = {
-          text: token.text.slice(0, charIndex + 1),
-          cls: token.cls,
-        };
-        charIndex++;
-        if (charIndex >= token.text.length) {
-          tokenIndex++;
-          charIndex = 0;
-        }
-      }
-      setDisplayed([...current]);
-    }, speed);
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.92 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease } },
+};
 
-    return () => clearInterval(interval);
-  }, [tokens, speed]);
+const popularTools = [
+  { label: "JSON → TS", href: "/tools/json-to-typescript" },
+  { label: "Regex Tester", href: "/tools/regex-tester" },
+  { label: "Password", href: "/tools/password-generator" },
+  { label: "Base64", href: "/tools/base64-encoder" },
+];
 
-  return displayed;
-}
+const categoryLabel = (id: string) => categories.find((c) => c.id === id)?.label ?? id;
 
-function CodeTypingBlock() {
-  const typedTokens = useTypingEffect(codeLines, 35);
-
-  return (
-    <div className="code-editor-block w-full max-w-lg mx-auto shadow-2xl">
-      <div className="code-header">
-        <span className="code-dot bg-error/80" />
-        <span className="code-dot bg-warning/80" />
-        <span className="code-dot bg-success/80" />
-        <span className="text-xs text-muted ml-2">tools.ts</span>
-      </div>
-      <div className="code-body min-h-[180px]">
-        <pre className="whitespace-pre-wrap">
-          {typedTokens.map((token, i) =>
-            token.text === "\n" ? (
-              <br key={i} />
-            ) : (
-              <span key={i} className={token.cls}>
-                {token.text}
-              </span>
-            )
-          )}
-          <span className="animate-blink text-primary">▍</span>
-        </pre>
-      </div>
-    </div>
-  );
-}
-
-function AnimatedCounter({ target, suffix = "" }: { target: number | string; suffix?: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isInView || typeof target !== "number") return;
-    let current = 0;
-    const step = Math.max(1, Math.floor(target / 40));
-    const interval = setInterval(() => {
-      current += step;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(interval);
-      } else {
-        setCount(current);
-      }
-    }, 30);
-    return () => clearInterval(interval);
-  }, [isInView, target]);
-
-  return (
-    <span ref={ref}>
-      {typeof target === "number" ? count : target}
-      {suffix}
-    </span>
-  );
-}
-
-function ScrollReveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+function ToolCard({ tool, index }: { tool: ToolItem; index: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      layout
+      variants={scaleIn}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      transition={{ delay: index * 0.03 }}
     >
-      {children}
+      <Link
+        href={tool.href}
+        style={{ "--cat": `var(--cat-${tool.category})` } as React.CSSProperties}
+        className="group flex flex-col h-full rounded-xl border border-surface-border bg-surface overflow-hidden transition-all duration-200 hover:border-cat/40 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.15)]"
+      >
+        <div className="bg-cat/[0.06] border-b border-surface-border">
+          <ToolPreview href={tool.href} />
+        </div>
+
+        <div className="flex flex-col flex-1 p-5">
+          <div className="flex items-center justify-between gap-2 mb-1.5">
+            <h3 className="text-[15px] font-semibold text-foreground">{tool.name}</h3>
+            <ArrowRight className="w-4 h-4 text-muted opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-cat transition-all" />
+          </div>
+          <p className="text-[13px] text-muted leading-relaxed flex-1">{tool.description}</p>
+          <div className="flex items-center gap-2 mt-4 text-[11px] font-medium text-muted">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cat" />
+              {categoryLabel(tool.category)}
+            </span>
+            {tool.badge && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span className={tool.badge === "Popular" ? "text-cat" : ""}>{tool.badge}</span>
+              </>
+            )}
+          </div>
+        </div>
+      </Link>
     </motion.div>
   );
 }
 
 export default function Home() {
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  const filteredTools = useMemo(() => {
+    return tools.filter((tool) => {
+      const matchesCategory = activeCategory === "all" || tool.category === activeCategory;
+      const matchesSearch =
+        search === "" ||
+        tool.name.toLowerCase().includes(search.toLowerCase()) ||
+        tool.description.toLowerCase().includes(search.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [search, activeCategory]);
+
   return (
     <>
-      {/* Hero with Background Video */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/video-1.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-20 text-center">
+      {/* Hero */}
+      <section className="border-b border-surface-border">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 grid lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-14 items-center">
+          <motion.div initial="hidden" animate="visible" variants={stagger}>
+            <motion.p variants={fadeUp} className="inline-flex items-center gap-2 text-sm font-medium text-muted mb-5">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              {tools.length} free tools · No signup
+            </motion.p>
+
+            <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl lg:text-[3.5rem] heading-xl mb-5">
+              Developer tools
+              <br />
+              that just work.
+            </motion.h1>
+
+            <motion.p variants={fadeUp} className="text-lg text-muted max-w-md mb-8 body-lg">
+              Format, convert, test and generate in seconds. Everything runs in your browser, so your data never leaves your device.
+            </motion.p>
+
+            {/* Hero Search — filters the tools grid below */}
+            <motion.form
+              variants={fadeUp}
+              className="max-w-md mb-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                document.getElementById("tools")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
+              <div className="relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted group-focus-within:text-foreground transition-colors" />
+                <input
+                  type="search"
+                  aria-label="Search tools"
+                  placeholder='Try "json", "regex", "color"...'
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-11 pr-24 py-3.5 rounded-xl bg-surface border border-surface-border text-foreground placeholder:text-muted focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors cursor-pointer"
+                >
+                  Search
+                </button>
+              </div>
+              {search && (
+                <p className="mt-2 text-[13px] text-muted">
+                  {filteredTools.length} {filteredTools.length === 1 ? "tool matches" : "tools match"} — press Enter to see {filteredTools.length === 1 ? "it" : "them"}
+                </p>
+              )}
+            </motion.form>
+
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-2 text-[13px]">
+              <span className="text-muted mr-1">Popular:</span>
+              {popularTools.map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className="px-3 py-1 rounded-full border border-surface-border bg-surface text-foreground hover:border-primary/40 hover:text-primary transition-colors"
+                >
+                  {t.label}
+                </Link>
+              ))}
+            </motion.div>
+          </motion.div>
+
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.5, delay: 0.25, ease }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-medium mb-6 border border-white/20">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Free &amp; Open — No Signup Required
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-tight text-white">
-              Developer &amp; Designer Tools{" "}
-              <span className="bg-gradient-to-r from-primary-light via-accent to-success bg-clip-text text-transparent">
-                Free &amp; Fast
-              </span>
-            </h1>
-            <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-10">
-              Lightweight utilities that run in your browser. No signup, no
-              tracking, no data sent to servers. Just tools that work.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link
-                href="#tools"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-colors shadow-lg text-lg"
-              >
-                Explore Tools
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/20 transition-colors border border-white/20 text-lg"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Contact Us
-              </Link>
-            </div>
+            <HeroDemo />
           </motion.div>
         </div>
       </section>
 
-      {/* Video — Watch How We Work */}
-      <section className="py-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <ScrollReveal>
-              <div className="neu-card overflow-hidden rounded-2xl shadow-lg">
-                <video
-                  controls
-                  playsInline
-                  className="w-full aspect-video object-cover"
+      {/* All Tools with Search & Filter */}
+      <section id="tools" className="py-20 px-4 sm:px-6 scroll-mt-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl heading-lg mb-2">All tools</h2>
+              <p className="text-muted">Every tool runs client-side. Your code stays on your machine.</p>
+            </div>
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+              <input
+                type="search"
+                aria-label="Filter tools"
+                placeholder="Filter tools..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-9 py-2 rounded-lg bg-surface border border-surface-border text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all"
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors cursor-pointer"
                 >
-                  <source src="/video-2.mp4" type="video/mp4" />
-                </video>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal delay={0.15}>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold mb-4 uppercase tracking-wide">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Watch How We Work
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4">
-                Built by Developers,{" "}
-                <span className="text-primary">for Developers</span>
-              </h2>
-              <p className="text-muted mb-4 leading-relaxed">
-                Watch our team in action — reviewing and testing every tool on Zentrify.
-                From JSON to TypeScript conversion to CSS generators, we make sure
-                each utility works flawlessly before it reaches you.
-              </p>
-              <ul className="space-y-3 mb-6">
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span className="text-sm text-muted"><strong className="text-foreground">Real team, real testing</strong> — every tool is reviewed and validated by our dev team</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span className="text-sm text-muted"><strong className="text-foreground">JSON → TypeScript</strong> — instant, accurate type generation from any JSON</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span className="text-sm text-muted"><strong className="text-foreground">CSS Generator</strong> — glassmorphism, gradients, and more with live preview</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="mt-1 w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </span>
-                  <span className="text-sm text-muted"><strong className="text-foreground">100% Free</strong> — no hidden costs, no signups, no data collection</span>
-                </li>
-              </ul>
-              <Link
-                href="#tools"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-colors shadow-md"
-              >
-                Try Our Tools
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </Link>
-            </ScrollReveal>
+                  <SearchX className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
+
+          {/* Category tabs */}
+          <div className="flex gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-surface-border mb-8 -mx-4 px-4 sm:mx-0 sm:px-0" role="tablist">
+            {categories.map((cat) => {
+              const count = cat.id === "all" ? tools.length : tools.filter((t) => t.category === cat.id).length;
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`relative whitespace-nowrap px-3 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
+                    isActive ? "text-foreground" : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  {cat.label}
+                  <span className="ml-1.5 text-xs text-muted">{count}</span>
+                  {isActive && (
+                    <motion.span layoutId="cat-underline" className="absolute left-0 right-0 bottom-0 h-0.5 bg-primary" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Tools Grid */}
+          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <AnimatePresence mode="popLayout">
+              {filteredTools.map((tool, i) => (
+                <ToolCard key={tool.href} tool={tool} index={i} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
+
+          {filteredTools.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-20"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-muted/10 flex items-center justify-center mx-auto mb-4">
+                <SearchX className="w-8 h-8 text-muted" />
+              </div>
+              <p className="text-muted font-medium text-lg">No tools found matching your search.</p>
+              <button
+                onClick={() => { setSearch(""); setActiveCategory("all"); }}
+                className="mt-3 text-primary text-sm font-medium hover:underline cursor-pointer"
+              >
+                Clear filters
+              </button>
+            </motion.div>
+          )}
         </div>
       </section>
 
-      {/* Tools */}
-      <section id="tools" className="pb-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <ScrollReveal>
-            <h2 className="text-2xl font-bold text-center mb-3">
-              Developer Utilities
-            </h2>
-            <p className="text-muted text-center mb-10 max-w-lg mx-auto">
-              Every tool runs client-side. Your code stays on your machine.
-            </p>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {tools.map((tool, i) => (
-              <ScrollReveal key={tool.href} delay={i * 0.1}>
-                <Link
-                  href={tool.href}
-                  className={`group block p-6 neu-card border-t-4 ${tool.borderColor} hover:shadow-lg transition-all duration-200 h-full`}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.05, rotate: 3 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                    className={`w-14 h-14 rounded-xl ${tool.iconBg} ${tool.color} flex items-center justify-center mb-5`}
-                  >
-                    {tool.icon}
-                  </motion.div>
-                  <h3 className="text-lg font-semibold mb-2">
-                    {tool.name}
-                  </h3>
-                  <p className="text-sm text-muted">{tool.description}</p>
-                  <div className={`mt-4 text-sm font-medium ${tool.color} flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity`}>
-                    Try it
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </Link>
-              </ScrollReveal>
+      {/* Why Zentrify */}
+      <section className="py-20 px-4 sm:px-6 border-t border-surface-border">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl heading-lg mb-2">Why Zentrify</h2>
+          <p className="text-muted mb-10">Small tools, done properly.</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+            {whyFeatures.map(({ title, description, Icon }) => (
+              <div key={title}>
+                <Icon className="w-5 h-5 text-primary mb-4" strokeWidth={1.8} />
+                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
+                <p className="text-sm text-muted leading-relaxed">{description}</p>
+              </div>
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Stats */}
-      <section className="pb-20 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <ScrollReveal delay={0}>
-              <div className="neu-card p-6 text-center border-t-4 border-t-success">
-                <div className="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <div className="text-3xl font-bold text-success mb-2">
-                  <AnimatedCounter target={100} suffix="%" />
-                </div>
-                <div className="font-medium mb-1">Free Forever</div>
-                <p className="text-sm text-muted">
-                  No hidden fees, no premium plans. Every tool is completely
-                  free.
-                </p>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal delay={0.1}>
-              <div className="neu-card p-6 text-center border-t-4 border-t-primary">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <div className="text-3xl font-bold text-primary mb-2">
-                  <AnimatedCounter target={0} />
-                </div>
-                <div className="font-medium mb-1">Data Collected</div>
-                <p className="text-sm text-muted">
-                  Everything runs in your browser. Your data never leaves your
-                  device.
-                </p>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal delay={0.2}>
-              <div className="neu-card p-6 text-center border-t-4 border-t-orange">
-                <div className="w-12 h-12 rounded-full bg-orange/10 flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-6 h-6 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div className="text-3xl font-bold text-orange mb-2">Fast</div>
-                <div className="font-medium mb-1">Instant Results</div>
-                <p className="text-sm text-muted">
-                  No loading screens. Get results the moment you type or click.
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="pb-20 px-4 sm:px-6">
-        <ScrollReveal>
-          <div className="max-w-3xl mx-auto text-center neu-card p-10 border-t-4 border-t-primary">
-            <h2 className="text-2xl font-bold mb-3">
-              Built for Developers, by Developers
-            </h2>
-            <p className="text-muted mb-6 max-w-lg mx-auto">
-              Stop wasting time on repetitive tasks. Convert, generate, and
-              transform — all from your browser, in seconds.
-            </p>
-            <Link
-              href="#tools"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-colors shadow-md"
-            >
-              Get Started — It&apos;s Free
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-7-7l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        </ScrollReveal>
       </section>
     </>
   );

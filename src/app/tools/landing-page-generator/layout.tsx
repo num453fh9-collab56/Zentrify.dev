@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Free Landing Page Templates - 500+ Designs with HTML/CSS Code",
+  title: "Free Landing Page Templates - 60+ Designs with HTML Code",
   description:
-    "Browse 500+ free landing page templates for any industry. Preview, customize colors, and copy clean HTML/CSS code instantly. No signup required.",
+    "Browse 60+ free landing page templates for any industry, including hand-picked premium designs. Preview, pick a color theme, and copy or download the HTML. No signup required.",
   keywords: [
     "free landing page templates",
     "landing page generator",
@@ -17,9 +17,9 @@ export const metadata: Metadata = {
     "copy paste landing page",
   ],
   openGraph: {
-    title: "Free Landing Page Templates - 500+ Designs with Code",
+    title: "Free Landing Page Templates - 60+ Designs with Code",
     description:
-      "Browse 500+ free landing page templates. Preview, customize, and copy HTML/CSS code instantly.",
+      "Browse 60+ free landing page templates. Preview, pick a theme, and copy or download the HTML.",
   },
 };
 

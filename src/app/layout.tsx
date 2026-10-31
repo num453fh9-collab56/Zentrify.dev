@@ -5,6 +5,8 @@ import Link from "next/link";
 import Script from "next/script";
 import { NavBar } from "./components/nav-bar";
 import { Providers } from "./components/providers";
+import { KeyboardShortcuts } from "./components/keyboard-shortcuts";
+import { PageProgress } from "./components/page-progress";
 import "./globals.css";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -45,17 +47,33 @@ export const metadata: Metadata = {
   },
 };
 
-const tools = [
-  { name: "JSON → TypeScript", href: "/tools/json-to-typescript" },
-  { name: "CSS Generator", href: "/tools/css-generator" },
-  { name: "SVG → JSX", href: "/tools/svg-to-jsx" },
-  { name: "Shadow Generator", href: "/tools/tailwind-shadow" },
-  { name: "Regex Tester", href: "/tools/regex-tester" },
-  { name: "Base64 Encoder", href: "/tools/base64-encoder" },
-  { name: "Color Palette", href: "/tools/color-palette" },
-  { name: "Markdown Preview", href: "/tools/markdown-preview" },
-  { name: "Landing Pages", href: "/tools/landing-page-generator" },
-  { name: "Password Generator", href: "/tools/password-generator" },
+const footerLinks = [
+  {
+    title: "Popular tools",
+    links: [
+      { name: "JSON → TypeScript", href: "/tools/json-to-typescript" },
+      { name: "Regex Tester", href: "/tools/regex-tester" },
+      { name: "Color Palette", href: "/tools/color-palette" },
+      { name: "Password Generator", href: "/tools/password-generator" },
+      { name: "JSON Formatter", href: "/tools/json-formatter" },
+      { name: "All tools →", href: "/tools" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { name: "About", href: "/about" },
+      { name: "Blog", href: "/blog" },
+      { name: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { name: "Privacy Policy", href: "/privacy" },
+      { name: "Terms of Service", href: "/terms" },
+    ],
+  },
 ];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -67,6 +85,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body className="min-h-full flex flex-col bg-background">
         {GA_ID && (
           <>
@@ -85,72 +108,50 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </>
         )}
         <Providers>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[300] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-white focus:text-sm focus:font-medium focus:outline-none"
+          >
+            Skip to main content
+          </a>
+          <PageProgress />
           <NavBar />
+          <KeyboardShortcuts />
 
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1" tabIndex={-1}>{children}</main>
 
-          <footer className="mt-auto bg-surface border-t border-surface-border">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <img
-                      src="/logo.png"
-                      alt="Zentrify"
-                      width={40}
-                      height={40}
-                      className="logo-img"
-                    />
-                    <span className="font-semibold">Zentrify</span>
+          <footer className="mt-auto border-t border-surface-border bg-surface">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-10">
+                {/* Brand */}
+                <div className="col-span-2 sm:col-span-1">
+                  <Link href="/" className="inline-flex items-center gap-2 mb-3">
+                    <Image src="/logo.png" alt="" width={28} height={28} className="logo-img" />
+                    <span className="font-bold">Zentrify</span>
+                  </Link>
+                  <p className="text-sm text-muted leading-relaxed max-w-[240px]">
+                    Free developer &amp; designer tools that run in your browser.
+                  </p>
+                </div>
+
+                {footerLinks.map((group) => (
+                  <div key={group.title}>
+                    <p className="text-sm font-semibold text-foreground mb-3">{group.title}</p>
+                    <ul className="space-y-2">
+                      {group.links.map((link) => (
+                        <li key={link.href}>
+                          <Link href={link.href} className="text-sm text-muted hover:text-foreground transition-colors">
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="text-sm text-muted">
-                    Free developer & designer utilities. Fast, private, no signup
-                    required.
-                  </p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-2">Tools</p>
-                  <ul className="space-y-1">
-                    {tools.map((tool) => (
-                      <li key={tool.href}>
-                        <Link
-                          href={tool.href}
-                          className="text-sm text-muted hover:text-primary transition-colors"
-                        >
-                          {tool.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <p className="font-semibold mb-2">Links</p>
-                  <ul className="space-y-1">
-                    <li>
-                      <Link
-                        href="/contact"
-                        className="text-sm text-muted hover:text-primary transition-colors"
-                      >
-                        Contact Us
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/#tools"
-                        className="text-sm text-muted hover:text-primary transition-colors"
-                      >
-                        All Tools
-                      </Link>
-                    </li>
-                  </ul>
-                  <p className="text-sm text-muted mt-3">
-                    Zentrify provides 100% free, fast, and private developer
-                    tools.
-                  </p>
-                </div>
+                ))}
               </div>
-              <div className="mt-8 pt-6 border-t border-surface-border text-center text-sm text-muted">
-                &copy; 2026 Zentrify. All rights reserved.
+
+              <div className="mt-10 pt-6 border-t border-surface-border text-xs text-muted">
+                &copy; 2026 Zentrify
               </div>
             </div>
           </footer>

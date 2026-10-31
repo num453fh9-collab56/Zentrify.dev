@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useToast } from "../../components/toast";
+import { ToolPageHeader } from "../../components/tool-page-header";
 
 function generatePassword(
   length: number,
@@ -53,10 +54,12 @@ export default function PasswordGeneratorPage() {
   const [lowercase, setLowercase] = useState(true);
   const [numbers, setNumbers] = useState(true);
   const [symbols, setSymbols] = useState(true);
-  const [password, setPassword] = useState(() =>
-    generatePassword(16, true, true, true, true)
-  );
+  const [password, setPassword] = useState("");
   const [history, setHistory] = useState<string[]>([]);
+
+  useEffect(() => {
+    setPassword(generatePassword(16, true, true, true, true));
+  }, []);
 
   const generate = useCallback(() => {
     const pw = generatePassword(length, uppercase, lowercase, numbers, symbols);
@@ -79,15 +82,9 @@ export default function PasswordGeneratorPage() {
   const noChars = !uppercase && !lowercase && !numbers && !symbols;
 
   return (
-    <section className="py-10 px-4 sm:px-6">
+    <section className="pt-6 sm:pt-8 pb-10 sm:pb-14 px-4 sm:px-6">
       <div className="max-w-2xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-1">Password Generator</h1>
-          <p className="text-sm text-muted">
-            Generate strong, random passwords. Everything runs in your browser —
-            no data is sent to any server.
-          </p>
-        </div>
+        <ToolPageHeader />
 
         <div className="neu-card p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
@@ -122,7 +119,7 @@ export default function PasswordGeneratorPage() {
             <button
               onClick={generate}
               disabled={noChars}
-              className="px-5 py-3.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-5 py-3.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
             >
               <svg
                 className="w-4 h-4"

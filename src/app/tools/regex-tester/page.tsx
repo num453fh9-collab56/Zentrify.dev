@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useToast } from "../../components/toast";
+import { ToolPageHeader } from "../../components/tool-page-header";
 
 const presets = [
   { label: "Email", pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}" },
@@ -79,15 +80,8 @@ export default function RegexTesterPage() {
   }, [pattern, flags, testString]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-          Regex Tester
-        </h1>
-        <p className="text-muted text-lg">
-          Test regular expressions with real-time matching and capture groups.
-        </p>
-      </div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-10 sm:pb-14">
+      <ToolPageHeader />
 
       {/* Pattern Input */}
       <div className="neu-card p-6 mb-6">
@@ -226,58 +220,9 @@ export default function RegexTesterPage() {
           </div>
         </div>
       )}
-      {/* SEO Article */}
-      <article className="mt-16 max-w-4xl mx-auto space-y-10">
+      <div className="mt-14 max-w-4xl mx-auto space-y-12">
         <section>
-          <h2 className="text-2xl font-bold mb-4">Free Online Regex Tester &amp; Debugger</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            Test and debug regular expressions in real time with Zentrify&apos;s free regex tester.
-            Write your pattern, paste your test string, and instantly see all matches highlighted
-            with capture group details. Supports all JavaScript regex flags including global,
-            case-insensitive, multiline, dotAll, and unicode modes.
-          </p>
-          <p className="text-muted leading-relaxed">
-            Whether you&apos;re validating emails, parsing log files, extracting data from text,
-            or learning regex for the first time — this tool gives you instant visual feedback
-            without leaving your browser.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Why Use a Regex Tester?</h2>
-          <ul className="text-muted space-y-2 list-disc list-inside">
-            <li><strong className="text-foreground">Instant feedback</strong> — see matches highlighted as you type, no need to run your code</li>
-            <li><strong className="text-foreground">Debug complex patterns</strong> — capture groups, lookaheads, and quantifiers are visualized clearly</li>
-            <li><strong className="text-foreground">Learn by doing</strong> — experiment with patterns and immediately see what they match</li>
-            <li><strong className="text-foreground">Save time</strong> — catch regex errors before they reach your codebase</li>
-            <li><strong className="text-foreground">Built-in presets</strong> — start with common patterns for email, URL, IP, phone numbers, and more</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Features</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Real-Time Matching</h3>
-              <p className="text-sm text-muted">Matches are highlighted instantly as you type your pattern or modify your test string — zero delay.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Capture Groups</h3>
-              <p className="text-sm text-muted">View all capture groups for each match with their index and content — essential for data extraction patterns.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">All JS Flags</h3>
-              <p className="text-sm text-muted">Toggle g (global), i (case-insensitive), m (multiline), s (dotAll), and u (unicode) flags with one click.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Common Presets</h3>
-              <p className="text-sm text-muted">One-click presets for email, URL, IPv4, phone, date, hex color, and more — great starting points to customize.</p>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Common Regex Patterns</h2>
+          <h2 className="text-xl font-semibold tracking-tight mb-4">Common Regex Patterns</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border border-surface-border rounded-xl overflow-hidden">
               <thead>
@@ -296,25 +241,7 @@ export default function RegexTesterPage() {
             </table>
           </div>
         </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Which regex flavor does this use?</h3>
-              <p className="text-sm text-muted">This tool uses JavaScript&apos;s native RegExp engine — the same one running in Node.js and all modern browsers. Patterns you test here will work identically in your JavaScript/TypeScript code.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Can I test multiline strings?</h3>
-              <p className="text-sm text-muted">Yes! Paste multi-line text in the test string area and enable the &apos;m&apos; (multiline) flag to make ^ and $ match line boundaries instead of string boundaries.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Is my data private?</h3>
-              <p className="text-sm text-muted">100% private. All regex matching runs locally in your browser using JavaScript&apos;s built-in RegExp. No data is transmitted to any server.</p>
-            </div>
-          </div>
-        </section>
-      </article>
+      </div>
     </div>
   );
 }

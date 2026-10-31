@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useToast } from "../../components/toast";
+import { ToolPageHeader } from "../../components/tool-page-header";
 
 type Mode = "encode" | "decode";
 
@@ -57,15 +58,8 @@ export default function Base64Page() {
   const outputSize = output.length;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-          Base64 Encoder / Decoder
-        </h1>
-        <p className="text-muted text-lg">
-          Encode text to Base64 or decode Base64 back to text. UTF-8 supported.
-        </p>
-      </div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-10 sm:pb-14">
+      <ToolPageHeader title="Base64 Encoder / Decoder" />
 
       {/* Mode Toggle */}
       <div className="neu-card p-2 inline-flex rounded-xl mb-6">
@@ -158,88 +152,6 @@ export default function Base64Page() {
           </span>
         )}
       </div>
-      {/* SEO Article */}
-      <article className="mt-16 max-w-4xl mx-auto space-y-10">
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Free Online Base64 Encoder &amp; Decoder</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            Encode text to Base64 or decode Base64 strings back to plain text instantly with
-            Zentrify&apos;s free tool. Full UTF-8 support for international characters, emojis,
-            and special symbols. See the output update in real time as you type.
-          </p>
-          <p className="text-muted leading-relaxed">
-            Base64 encoding is essential for embedding data in URLs, emails, JSON payloads,
-            HTML data URIs, and API authentication headers. This tool handles it all — privately
-            in your browser with zero server communication.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">What is Base64 Encoding?</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            Base64 is a binary-to-text encoding scheme that represents binary data using 64 ASCII
-            characters (A-Z, a-z, 0-9, +, /). It&apos;s used whenever binary or non-ASCII data
-            needs to travel through text-only channels like email (MIME), URLs, JSON, or XML.
-          </p>
-          <ul className="text-muted space-y-2 list-disc list-inside">
-            <li><strong className="text-foreground">Email attachments</strong> — MIME encoding uses Base64 to embed files in email bodies</li>
-            <li><strong className="text-foreground">Data URIs</strong> — embed images directly in HTML/CSS as <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">data:image/png;base64,...</code></li>
-            <li><strong className="text-foreground">API authentication</strong> — HTTP Basic Auth sends credentials as Base64-encoded strings</li>
-            <li><strong className="text-foreground">JWT tokens</strong> — JSON Web Tokens use Base64url encoding for header and payload segments</li>
-            <li><strong className="text-foreground">Binary in JSON</strong> — store binary data in JSON fields that only support text</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Features</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Encode &amp; Decode</h3>
-              <p className="text-sm text-muted">Switch between encoding and decoding modes with one click. Swap input and output instantly with the reverse button.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">UTF-8 Support</h3>
-              <p className="text-sm text-muted">Full Unicode support — encode Arabic, Chinese, Japanese, emoji, and any UTF-8 text correctly.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Real-Time Output</h3>
-              <p className="text-sm text-muted">Results appear instantly as you type — no need to click a button or wait for processing.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Size Statistics</h3>
-              <p className="text-sm text-muted">See character count and encoding size ratio — Base64 increases data size by approximately 33%.</p>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
-          <ol className="text-muted space-y-3 list-decimal list-inside">
-            <li><strong className="text-foreground">Choose mode</strong> — select Encode (text → Base64) or Decode (Base64 → text)</li>
-            <li><strong className="text-foreground">Enter input</strong> — type or paste your text/Base64 string</li>
-            <li><strong className="text-foreground">Get result</strong> — output appears instantly in real time</li>
-            <li><strong className="text-foreground">Copy output</strong> — click Copy to grab the result for your project</li>
-          </ol>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Is Base64 encryption?</h3>
-              <p className="text-sm text-muted">No. Base64 is an encoding, not encryption. It&apos;s easily reversible and provides no security. It&apos;s designed for data transport, not data protection. Never use Base64 to &quot;hide&quot; sensitive information.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Why does Base64 increase file size?</h3>
-              <p className="text-sm text-muted">Base64 encodes 3 bytes of binary data into 4 ASCII characters, resulting in approximately 33% size increase. This is the trade-off for being able to transmit binary data through text-only channels.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Does this support file encoding?</h3>
-              <p className="text-sm text-muted">This tool encodes text strings. For encoding files (images, PDFs), you can use the browser&apos;s FileReader API or command-line tools like <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">base64</code> on macOS/Linux.</p>
-            </div>
-          </div>
-        </section>
-      </article>
     </div>
   );
 }

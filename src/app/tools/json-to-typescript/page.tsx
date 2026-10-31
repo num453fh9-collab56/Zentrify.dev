@@ -2,10 +2,12 @@
 
 import { useState, useCallback } from "react";
 import { useToast } from "../../components/toast";
+import { ToolPageHeader } from "../../components/tool-page-header";
 
 type OutputMode = "typescript" | "zod";
+type DeclType = "interface" | "type";
 
-function inferType(value: unknown, name: string, interfaces: Map<string, string>, mode: OutputMode, exportKw: boolean, readonlyKw: boolean): string {
+function inferType(value: unknown, name: string, interfaces: Map<string, string>, mode: OutputMode, exportKw: boolean, readonlyKw: boolean, _declType: DeclType = "interface", _allOptional: boolean = false, _sortKeys: boolean = false): string {
   if (value === null) return mode === "zod" ? "z.null()" : "null";
   if (typeof value === "string") return mode === "zod" ? "z.string()" : "string";
   if (typeof value === "number") return mode === "zod" ? "z.number()" : "number";
@@ -15,13 +17,13 @@ function inferType(value: unknown, name: string, interfaces: Map<string, string>
     if (value.length === 0) {
       return mode === "zod" ? "z.array(z.unknown())" : "unknown[]";
     }
-    const elementType = inferType(value[0], name + "Item", interfaces, mode, exportKw, readonlyKw);
+    const elementType = inferType(value[0], name + "Item", interfaces, mode, exportKw, readonlyKw, _declType, _allOptional, _sortKeys);
     return mode === "zod" ? `z.array(${elementType})` : `${elementType}[]`;
   }
 
   if (typeof value === "object") {
     const interfaceName = capitalize(name);
-    generateInterface(value as Record<string, unknown>, interfaceName, interfaces, mode, exportKw, readonlyKw);
+    generateInterface(value as Record<string, unknown>, interfaceName, interfaces, mode, exportKw, readonlyKw, _declType, _allOptional, _sortKeys);
     return mode === "zod" ? `${interfaceName}Schema` : interfaceName;
   }
 
@@ -34,13 +36,25 @@ function generateInterface(
   interfaces: Map<string, string>,
   mode: OutputMode,
   exportKw: boolean,
-  readonlyKw: boolean
+  readonlyKw: boolean,
+  declType: DeclType = "interface",
+  allOptional: boolean = false,
+  sortKeys: boolean = false
 ) {
-  const entries = Object.entries(obj);
+  let entries = Object.entries(obj);
+  if (sortKeys) {
+    entries = entries.sort((a, b) => a[0].localeCompare(b[0]));
+  }
 
   if (mode === "zod") {
     const fields = entries.map(([key, value]) => {
-      const type = inferType(value, key, interfaces, mode, exportKw, readonlyKw);
+      let type = inferType(value, key, interfaces, mode, exportKw, readonlyKw, declType, allOptional, sortKeys);
+      if (value === null) {
+        type = "z.nullable(z.any())";
+      }
+      if (allOptional) {
+        type = `${type}.optional()`;
+      }
       return `  ${safeName(key)}: ${type},`;
     });
     const prefix = exportKw ? "export " : "";
@@ -48,13 +62,22 @@ function generateInterface(
     interfaces.set(name, schema);
   } else {
     const fields = entries.map(([key, value]) => {
-      const type = inferType(value, key, interfaces, mode, exportKw, readonlyKw);
+      let type = inferType(value, key, interfaces, mode, exportKw, readonlyKw, declType, allOptional, sortKeys);
+      if (value === null) {
+        type = "any | null";
+      }
       const ro = readonlyKw ? "readonly " : "";
-      return `  ${ro}${safeName(key)}: ${type};`;
+      const opt = allOptional ? "?" : "";
+      return `  ${ro}${safeName(key)}${opt}: ${type};`;
     });
     const prefix = exportKw ? "export " : "";
-    const iface = `${prefix}interface ${name} {\n${fields.join("\n")}\n}`;
-    interfaces.set(name, iface);
+    if (declType === "type") {
+      const typeAlias = `${prefix}type ${name} = {\n${fields.join("\n")}\n};`;
+      interfaces.set(name, typeAlias);
+    } else {
+      const iface = `${prefix}interface ${name} {\n${fields.join("\n")}\n}`;
+      interfaces.set(name, iface);
+    }
   }
 }
 
@@ -66,16 +89,25 @@ function safeName(key: string): string {
   return /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : `"${key}"`;
 }
 
-function convert(json: string, rootName: string, mode: OutputMode, exportKw: boolean, readonlyKw: boolean): string {
+function convert(
+  json: string,
+  rootName: string,
+  mode: OutputMode,
+  exportKw: boolean,
+  readonlyKw: boolean,
+  declType: DeclType = "interface",
+  allOptional: boolean = false,
+  sortKeys: boolean = false
+): string {
   const parsed = JSON.parse(json);
   const interfaces = new Map<string, string>();
 
   if (Array.isArray(parsed)) {
     if (parsed.length > 0 && typeof parsed[0] === "object" && parsed[0] !== null) {
-      generateInterface(parsed[0] as Record<string, unknown>, rootName, interfaces, mode, exportKw, readonlyKw);
+      generateInterface(parsed[0] as Record<string, unknown>, rootName, interfaces, mode, exportKw, readonlyKw, declType, allOptional, sortKeys);
     }
     const elementType = parsed.length > 0
-      ? inferType(parsed[0], rootName, interfaces, mode, exportKw, readonlyKw)
+      ? inferType(parsed[0], rootName, interfaces, mode, exportKw, readonlyKw, declType, allOptional, sortKeys)
       : mode === "zod" ? "z.unknown()" : "unknown";
 
     if (mode === "zod") {
@@ -86,13 +118,17 @@ function convert(json: string, rootName: string, mode: OutputMode, exportKw: boo
     } else {
       const result = Array.from(interfaces.values());
       const prefix = exportKw ? "export " : "";
-      result.push(`${prefix}type ${rootName}List = ${elementType}[];`);
+      if (declType === "type") {
+        result.push(`${prefix}type ${rootName}List = ${elementType}[];`);
+      } else {
+        result.push(`${prefix}type ${rootName}List = ${elementType}[];`);
+      }
       return result.join("\n\n");
     }
   }
 
   if (typeof parsed === "object" && parsed !== null) {
-    generateInterface(parsed as Record<string, unknown>, rootName, interfaces, mode, exportKw, readonlyKw);
+    generateInterface(parsed as Record<string, unknown>, rootName, interfaces, mode, exportKw, readonlyKw, declType, allOptional, sortKeys);
     const result = Array.from(interfaces.values());
     if (mode === "zod") {
       return `import { z } from "zod";\n\n${result.join("\n\n")}`;
@@ -100,12 +136,15 @@ function convert(json: string, rootName: string, mode: OutputMode, exportKw: boo
     return result.join("\n\n");
   }
 
-  const simpleType = inferType(parsed, rootName, interfaces, mode, exportKw, readonlyKw);
+  const simpleType = inferType(parsed, rootName, interfaces, mode, exportKw, readonlyKw, declType, allOptional, sortKeys);
   if (mode === "zod") {
     const prefix = exportKw ? "export " : "";
     return `import { z } from "zod";\n\n${prefix}const ${rootName}Schema = ${simpleType};`;
   }
   const prefix = exportKw ? "export " : "";
+  if (declType === "type") {
+    return `${prefix}type ${rootName} = ${simpleType};`;
+  }
   return `${prefix}type ${rootName} = ${simpleType};`;
 }
 
@@ -131,18 +170,21 @@ export default function JsonToTypeScriptPage() {
   const [mode, setMode] = useState<OutputMode>("typescript");
   const [exportKw, setExportKw] = useState(true);
   const [readonlyKw, setReadonlyKw] = useState(false);
+  const [declType, setDeclType] = useState<DeclType>("interface");
+  const [allOptional, setAllOptional] = useState(false);
+  const [sortKeys, setSortKeys] = useState(false);
   const { toast } = useToast();
 
   const handleConvert = useCallback(() => {
     setError("");
     try {
-      const result = convert(input, rootName || "Root", mode, exportKw, readonlyKw);
+      const result = convert(input, rootName || "Root", mode, exportKw, readonlyKw, declType, allOptional, sortKeys);
       setOutput(result);
     } catch (e) {
       setOutput("");
       setError(e instanceof Error ? e.message : "Invalid JSON");
     }
-  }, [input, rootName, mode, exportKw, readonlyKw]);
+  }, [input, rootName, mode, exportKw, readonlyKw, declType, allOptional, sortKeys]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(output);
@@ -160,15 +202,8 @@ export default function JsonToTypeScriptPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-          JSON to TypeScript Converter
-        </h1>
-        <p className="text-muted text-lg">
-          Paste JSON, get TypeScript interfaces or Zod schemas instantly.
-        </p>
-      </div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-10 sm:pb-14">
+      <ToolPageHeader title="JSON to TypeScript Converter" />
 
       {/* Options Bar */}
       <div className="neu-card p-4 mb-6 flex flex-wrap items-center gap-4">
@@ -197,13 +232,38 @@ export default function JsonToTypeScriptPage() {
             onClick={() => setMode("zod")}
             className={`px-3 py-1.5 text-sm font-medium rounded-xl transition-all ${
               mode === "zod"
-                ? "bg-purple text-white shadow-sm"
-                : "text-muted hover:text-purple"
+                ? "bg-primary text-white shadow-sm"
+                : "text-muted hover:text-cat"
             }`}
           >
             Zod
           </button>
         </div>
+
+        {mode === "typescript" && (
+          <div className="flex items-center gap-1 neu-input p-1">
+            <button
+              onClick={() => setDeclType("interface")}
+              className={`px-3 py-1.5 text-sm font-medium rounded-xl transition-all ${
+                declType === "interface"
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-muted hover:text-primary"
+              }`}
+            >
+              interface
+            </button>
+            <button
+              onClick={() => setDeclType("type")}
+              className={`px-3 py-1.5 text-sm font-medium rounded-xl transition-all ${
+                declType === "type"
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-muted hover:text-primary"
+              }`}
+            >
+              type
+            </button>
+          </div>
+        )}
 
         <label className="flex items-center gap-2 cursor-pointer">
           <input
@@ -215,14 +275,36 @@ export default function JsonToTypeScriptPage() {
           <span className="text-sm">Export</span>
         </label>
 
+        {mode === "typescript" && (
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={readonlyKw}
+              onChange={(e) => setReadonlyKw(e.target.checked)}
+              className="accent-primary w-4 h-4"
+            />
+            <span className="text-sm">Readonly</span>
+          </label>
+        )}
+
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
-            checked={readonlyKw}
-            onChange={(e) => setReadonlyKw(e.target.checked)}
+            checked={allOptional}
+            onChange={(e) => setAllOptional(e.target.checked)}
             className="accent-primary w-4 h-4"
           />
-          <span className="text-sm">Readonly</span>
+          <span className="text-sm">All Optional (?)</span>
+        </label>
+
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={sortKeys}
+            onChange={(e) => setSortKeys(e.target.checked)}
+            className="accent-primary w-4 h-4"
+          />
+          <span className="text-sm">Sort Keys</span>
         </label>
       </div>
 
@@ -285,88 +367,14 @@ export default function JsonToTypeScriptPage() {
       {/* Convert Button */}
       <button
         onClick={handleConvert}
-        className="w-full sm:w-auto px-10 py-3.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-colors shadow-md"
+        className="w-full sm:w-auto px-10 py-3.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark transition-colors"
       >
         Convert
       </button>
 
-      {/* SEO Article */}
-      <article className="mt-16 max-w-4xl mx-auto space-y-10">
+      <div className="mt-14 max-w-4xl mx-auto space-y-12">
         <section>
-          <h2 className="text-2xl font-bold mb-4">Free Online JSON to TypeScript Converter</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            Zentrify&apos;s JSON to TypeScript converter instantly transforms your JSON data into
-            fully typed TypeScript interfaces or Zod validation schemas. Whether you&apos;re working
-            with REST API responses, configuration files, database records, or any structured JSON,
-            this tool generates clean, production-ready type definitions in seconds.
-          </p>
-          <p className="text-muted leading-relaxed">
-            Unlike other converters, Zentrify runs entirely in your browser — no data is sent to
-            any server, making it safe for proprietary or sensitive data. No signup required, no
-            rate limits, no ads blocking your workflow.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Why Convert JSON to TypeScript?</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            TypeScript&apos;s type system catches bugs at compile time that would otherwise slip
-            into production. When you receive JSON data from an API, database, or third-party
-            service, that data is untyped by default. By generating TypeScript interfaces from
-            your JSON, you get:
-          </p>
-          <ul className="text-muted space-y-2 list-disc list-inside">
-            <li><strong className="text-foreground">Autocomplete &amp; IntelliSense</strong> — your editor knows every field and its type, so you write code faster with fewer mistakes</li>
-            <li><strong className="text-foreground">Compile-time error checking</strong> — access a non-existent property or pass the wrong type? TypeScript catches it before you ship</li>
-            <li><strong className="text-foreground">Self-documenting code</strong> — interfaces serve as living documentation for your data shapes</li>
-            <li><strong className="text-foreground">Refactoring confidence</strong> — rename a field and TypeScript highlights every file that needs updating</li>
-            <li><strong className="text-foreground">Team collaboration</strong> — shared interfaces keep frontend and backend teams aligned</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Features</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">TypeScript Interfaces</h3>
-              <p className="text-sm text-muted">Generate clean interfaces with proper type inference for strings, numbers, booleans, arrays, and nested objects.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Zod Schemas</h3>
-              <p className="text-sm text-muted">Generate Zod validation schemas for runtime type checking — perfect for form validation and API input parsing.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Nested Object Support</h3>
-              <p className="text-sm text-muted">Handles deeply nested objects and arrays recursively, generating separate interfaces for each level.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Export &amp; Readonly</h3>
-              <p className="text-sm text-muted">Toggle export keywords and readonly modifiers to match your project&apos;s coding conventions.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Custom Root Name</h3>
-              <p className="text-sm text-muted">Set a custom name for the root interface — User, Product, ApiResponse, or anything you need.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">JSON Prettifier</h3>
-              <p className="text-sm text-muted">Built-in prettify button formats messy or minified JSON into readable, indented output before converting.</p>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
-          <ol className="text-muted space-y-3 list-decimal list-inside">
-            <li><strong className="text-foreground">Paste your JSON</strong> — copy JSON from your API response, Postman, or any source and paste it into the input panel</li>
-            <li><strong className="text-foreground">Choose output mode</strong> — select TypeScript for interfaces or Zod for runtime validation schemas</li>
-            <li><strong className="text-foreground">Set options</strong> — customize the root name, toggle export/readonly as needed</li>
-            <li><strong className="text-foreground">Click Convert</strong> — your typed code appears instantly in the output panel</li>
-            <li><strong className="text-foreground">Copy &amp; use</strong> — one-click copy to clipboard, paste directly into your project</li>
-          </ol>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">TypeScript vs Zod: Which Should You Choose?</h2>
+          <h2 className="text-xl font-semibold tracking-tight mb-4">TypeScript vs Zod: Which Should You Choose?</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border border-surface-border rounded-xl overflow-hidden">
               <thead>
@@ -385,29 +393,7 @@ export default function JsonToTypeScriptPage() {
             </table>
           </div>
         </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Is my JSON data safe?</h3>
-              <p className="text-sm text-muted">Yes. Everything runs 100% in your browser. Your JSON is never sent to any server — not even ours. You can verify this by checking the network tab in your browser&apos;s developer tools.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Does it handle nested JSON?</h3>
-              <p className="text-sm text-muted">Yes. The converter recursively processes nested objects and arrays, generating separate interfaces for each nested structure with proper type references.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Can I convert JSON arrays?</h3>
-              <p className="text-sm text-muted">Yes. If your JSON root is an array, the converter infers the element type from the first item and generates the corresponding interface plus an array type alias.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">What about optional fields?</h3>
-              <p className="text-sm text-muted">Currently, all fields are generated as required. For optional fields, you can manually add the ? modifier after conversion. We&apos;re working on auto-detection of optional fields from multiple JSON samples.</p>
-            </div>
-          </div>
-        </section>
-      </article>
+      </div>
     </div>
   );
 }

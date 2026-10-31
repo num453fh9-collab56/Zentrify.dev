@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useToast } from "../../components/toast";
+import { ToolPageHeader } from "../../components/tool-page-header";
 
 interface ShadowLayer {
   x: number;
@@ -76,15 +77,8 @@ export default function TailwindShadowPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-16">
-      <div className="mb-8">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-          Tailwind Shadow Generator
-        </h1>
-        <p className="text-muted text-lg">
-          Create custom box-shadows visually — get Tailwind classes and CSS.
-        </p>
-      </div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-10 sm:pb-14">
+      <ToolPageHeader title="Tailwind Shadow Generator" />
 
       {/* Presets */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -93,7 +87,7 @@ export default function TailwindShadowPage() {
           <button
             key={p.name}
             onClick={() => applyPreset(p)}
-            className="neu-btn px-4 py-2 text-sm font-medium text-orange hover:text-primary"
+            className="neu-btn px-4 py-2 text-sm font-medium text-cat hover:text-primary"
           >
             {p.name}
           </button>
@@ -102,8 +96,8 @@ export default function TailwindShadowPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         {/* Preview */}
-        <div className="neu-card p-6 border-t-4 border-t-orange">
-          <span className="text-sm font-medium text-orange mb-4 block">Preview</span>
+        <div className="neu-card p-6">
+          <span className="text-sm font-medium text-cat mb-4 block">Preview</span>
           <div className="rounded-2xl h-72 bg-background flex items-center justify-center">
             <div
               className="w-48 h-32 bg-surface rounded-2xl flex items-center justify-center border border-surface-border transition-shadow duration-200"
@@ -115,7 +109,7 @@ export default function TailwindShadowPage() {
         </div>
 
         {/* Controls */}
-        <div className="neu-card p-6 border-t-4 border-t-primary overflow-y-auto max-h-[480px]">
+        <div className="neu-card p-6 overflow-y-auto max-h-[480px]">
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm font-medium">Shadow Layers</span>
             {layers.length < 5 && (
@@ -132,7 +126,7 @@ export default function TailwindShadowPage() {
             {layers.map((layer, i) => (
               <div key={i} className="neu-card-sm p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-semibold text-orange">Layer {i + 1}</span>
+                  <span className="text-xs font-semibold text-cat">Layer {i + 1}</span>
                   {layers.length > 1 && (
                     <button
                       onClick={() => removeLayer(i)}
@@ -177,15 +171,15 @@ export default function TailwindShadowPage() {
       </div>
 
       {/* Output */}
-      <div className="neu-card p-6 border-t-4 border-t-orange">
+      <div className="neu-card p-6">
         <div className="flex items-center justify-between mb-3">
           <div className="flex gap-1 neu-input p-1">
             <button
               onClick={() => setOutputTab("tailwind")}
               className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all ${
                 outputTab === "tailwind"
-                  ? "bg-orange text-white shadow-sm"
-                  : "text-muted hover:text-orange"
+                  ? "bg-primary text-white shadow-sm"
+                  : "text-muted hover:text-cat"
               }`}
             >
               Tailwind
@@ -205,7 +199,7 @@ export default function TailwindShadowPage() {
             onClick={() =>
               handleCopy(outputTab === "tailwind" ? tailwindClass : cssCode)
             }
-            className="neu-btn px-4 py-1.5 text-xs font-medium text-orange hover:text-primary"
+            className="neu-btn px-4 py-1.5 text-xs font-medium text-cat hover:text-primary"
           >
             Copy
           </button>
@@ -215,85 +209,6 @@ export default function TailwindShadowPage() {
         </pre>
       </div>
 
-      {/* SEO Article */}
-      <article className="mt-16 max-w-4xl mx-auto space-y-10">
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Free Tailwind CSS Shadow Generator</h2>
-          <p className="text-muted leading-relaxed mb-3">
-            Design custom box-shadow effects visually with Zentrify&apos;s free shadow generator.
-            Adjust X/Y offset, blur radius, spread, color, and opacity with intuitive sliders —
-            see the result update in real time. Export your shadow as a Tailwind CSS arbitrary
-            value class or raw CSS ready for any project.
-          </p>
-          <p className="text-muted leading-relaxed">
-            Tailwind&apos;s built-in shadow utilities (shadow-sm, shadow-md, shadow-lg) cover common
-            cases, but real-world designs often need custom shadows. This tool lets you create
-            exactly the shadow you need — including multi-layer shadows and inset effects.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Why Custom Shadows Matter</h2>
-          <ul className="text-muted space-y-2 list-disc list-inside">
-            <li><strong className="text-foreground">Depth &amp; hierarchy</strong> — shadows create visual layers that guide users&apos; attention to important elements</li>
-            <li><strong className="text-foreground">Brand consistency</strong> — custom shadows match your design system instead of generic defaults</li>
-            <li><strong className="text-foreground">Micro-interactions</strong> — animated shadows on hover/focus make interfaces feel responsive and polished</li>
-            <li><strong className="text-foreground">Card designs</strong> — the right shadow makes cards feel elevated and clickable</li>
-            <li><strong className="text-foreground">Neumorphism</strong> — combine inset and outset shadows for modern neumorphic UI effects</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Features</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Visual Controls</h3>
-              <p className="text-sm text-muted">Intuitive sliders for X offset, Y offset, blur radius, spread, and opacity — see changes live as you adjust.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Multi-Layer Shadows</h3>
-              <p className="text-sm text-muted">Stack up to 5 shadow layers for complex, realistic depth effects — each layer independently configurable.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Inset Shadows</h3>
-              <p className="text-sm text-muted">Toggle inset mode for inner shadows — perfect for input fields, pressed buttons, and neumorphic designs.</p>
-            </div>
-            <div className="neu-card-sm p-4">
-              <h3 className="font-semibold mb-1">Tailwind &amp; CSS Output</h3>
-              <p className="text-sm text-muted">Get output as Tailwind arbitrary value classes or standard CSS box-shadow — works with any framework.</p>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">How to Use</h2>
-          <ol className="text-muted space-y-3 list-decimal list-inside">
-            <li><strong className="text-foreground">Start with a preset</strong> — choose a Tailwind preset (sm, md, lg, xl, 2xl) or start from scratch</li>
-            <li><strong className="text-foreground">Customize</strong> — adjust offset, blur, spread, color, and opacity with sliders</li>
-            <li><strong className="text-foreground">Add layers</strong> — click &quot;Add Layer&quot; for multi-shadow effects with independent controls</li>
-            <li><strong className="text-foreground">Toggle inset</strong> — switch to inner shadow for pressed or recessed effects</li>
-            <li><strong className="text-foreground">Copy code</strong> — grab the Tailwind class or CSS code with one click</li>
-          </ol>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">How do I use custom shadows in Tailwind?</h3>
-              <p className="text-sm text-muted">Use arbitrary value syntax: <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">shadow-[0_4px_16px_rgba(0,0,0,0.1)]</code>. This generator creates the exact class for you — just paste it into your className.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">Can I animate shadows?</h3>
-              <p className="text-sm text-muted">Yes! CSS box-shadow is animatable. Use <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">transition: box-shadow 0.2s</code> for smooth hover effects. In Tailwind, add <code className="text-xs bg-surface border border-surface-border px-1 py-0.5 rounded">transition-shadow duration-200</code>.</p>
-            </div>
-            <div className="neu-card-sm p-5">
-              <h3 className="font-semibold mb-2">What are multi-layer shadows used for?</h3>
-              <p className="text-sm text-muted">Layering shadows creates more realistic depth. A common pattern is a tight, dark shadow for definition plus a wide, light shadow for ambient glow — mimicking real-world lighting.</p>
-            </div>
-          </div>
-        </section>
-      </article>
     </div>
   );
 }
@@ -319,7 +234,7 @@ function RangeControl({
     <div>
       <div className="flex items-center justify-between mb-1">
         <label className="text-xs font-medium">{label}</label>
-        <span className="text-xs font-mono text-orange font-bold">
+        <span className="text-xs font-mono text-cat font-bold">
           {value}{unit}
         </span>
       </div>
