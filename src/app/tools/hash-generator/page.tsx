@@ -121,14 +121,14 @@ function encode(buf: Uint8Array, enc: Encoding): string {
 }
 
 async function shaBytes(algorithm: string, data: Uint8Array): Promise<Uint8Array> {
-  const buffer = await crypto.subtle.digest(algorithm, data);
+  const buffer = await crypto.subtle.digest(algorithm, data as unknown as ArrayBuffer);
   return new Uint8Array(buffer);
 }
 
 async function hmacSha(algorithm: string, key: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
   const algo = algorithm === "SHA-1" ? "SHA-1" : algorithm === "SHA-256" ? "SHA-256" : "SHA-512";
-  const cryptoKey = await crypto.subtle.importKey("raw", key, { name: "HMAC", hash: algo }, false, ["sign"]);
-  const sig = await crypto.subtle.sign("HMAC", cryptoKey, data);
+  const cryptoKey = await crypto.subtle.importKey("raw", key as unknown as ArrayBuffer, { name: "HMAC", hash: algo }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", cryptoKey, data as unknown as ArrayBuffer);
   return new Uint8Array(sig);
 }
 
