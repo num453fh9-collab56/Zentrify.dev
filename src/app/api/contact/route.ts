@@ -29,11 +29,18 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { name, email, message } = body;
+    const { name, email, subject, message } = body;
 
-    if (!name || !email || !message) {
+    if (!name || !email || !subject || !message) {
       return NextResponse.json(
         { error: "All fields are required." },
+        { status: 400 }
+      );
+    }
+
+    if (typeof subject !== "string" || subject.length > 200) {
+      return NextResponse.json(
+        { error: "Invalid subject." },
         { status: 400 }
       );
     }
@@ -72,7 +79,7 @@ export async function POST(req: NextRequest) {
     //   text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
     // });
 
-    console.log("[Contact Form]", { name, email, message: message.slice(0, 100) });
+    console.log("[Contact Form]", { name, email, subject, message: message.slice(0, 100) });
 
     return NextResponse.json({ success: true });
   } catch {
