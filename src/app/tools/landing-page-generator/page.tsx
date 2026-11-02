@@ -412,6 +412,8 @@ export default function LandingPageGeneratorPage() {
   const [activeTheme, setActiveTheme] = useState(colorThemes[0]);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [showCode, setShowCode] = useState(false);
+  const [premiumLimit, setPremiumLimit] = useState(12);
+  const [classicLimit, setClassicLimit] = useState(12);
   const { toast } = useToast();
   const { extra, loaded } = useTemplateModules();
 
@@ -530,7 +532,7 @@ export default function LandingPageGeneratorPage() {
           {presentCategories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => { setActiveCategory(cat); setPremiumLimit(12); setClassicLimit(12); }}
               className={`whitespace-nowrap px-3 h-8 text-[13px] font-medium rounded-full border transition-colors cursor-pointer ${
                 activeCategory === cat
                   ? "bg-foreground text-background border-foreground"
@@ -556,7 +558,7 @@ export default function LandingPageGeneratorPage() {
                 <span className="text-sm text-muted flex-shrink-0">{premium.length} templates</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {premium.map((template) => (
+                {premium.slice(0, premiumLimit).map((template) => (
                   <PremiumCard
                     key={template.id}
                     editable={!!editableTemplates[template.id]}
@@ -566,6 +568,16 @@ export default function LandingPageGeneratorPage() {
                   />
                 ))}
               </div>
+              {premium.length > premiumLimit && (
+                <div className="flex justify-center mt-8">
+                  <button
+                    onClick={() => setPremiumLimit((l) => l + 12)}
+                    className="h-10 px-6 text-sm font-medium rounded-lg border border-surface-border text-muted hover:text-foreground hover:border-primary/40 transition-colors cursor-pointer"
+                  >
+                    Show more premium ({premium.length - premiumLimit} remaining)
+                  </button>
+                </div>
+              )}
             </section>
           )}
 
@@ -579,15 +591,24 @@ export default function LandingPageGeneratorPage() {
                 <span className="text-sm text-muted flex-shrink-0">{classic.length} templates</span>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6">
-                {classic.map((template) => (
+                {classic.slice(0, classicLimit).map((template) => (
                   <ClassicCard
                     key={template.id}
                     template={template}
-                    html={template.getCode(activeTheme)}
                     onOpen={() => openTemplate(template)}
                   />
                 ))}
               </div>
+              {classic.length > classicLimit && (
+                <div className="flex justify-center mt-8">
+                  <button
+                    onClick={() => setClassicLimit((l) => l + 12)}
+                    className="h-10 px-6 text-sm font-medium rounded-lg border border-surface-border text-muted hover:text-foreground hover:border-primary/40 transition-colors cursor-pointer"
+                  >
+                    Show more classic ({classic.length - classicLimit} remaining)
+                  </button>
+                </div>
+              )}
             </section>
           )}
 
