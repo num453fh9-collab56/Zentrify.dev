@@ -8,6 +8,7 @@ import {
   ChevronDown,
   Copy,
   Download,
+  Globe,
   Monitor,
   Redo2,
   RotateCcw,
@@ -17,6 +18,7 @@ import {
 } from "lucide-react";
 import { useToast } from "../../../components/toast";
 import { ListInput, ScalarInput } from "./fields";
+import { PublishModal } from "./publish-modal";
 import type { Content, EditableTemplate, Item, Section } from "./types";
 
 const devices = [
@@ -192,6 +194,7 @@ export function LandingEditor({ template, onClose }: { template: EditableTemplat
 
   const [openSection, setOpenSection] = useState<string>(template.schema[0].id);
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
+  const [showPublish, setShowPublish] = useState(false);
   const issues = useMemo(() => template.checks?.(content) ?? [], [template, content]);
 
   const pageName = (content.values.brand?.name as string) || template.name;
@@ -361,9 +364,13 @@ export function LandingEditor({ template, onClose }: { template: EditableTemplat
             <Copy className="w-4 h-4" />
             Copy
           </button>
-          <button onClick={download} className="inline-flex items-center gap-2 h-9 px-3.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors cursor-pointer">
+          <button onClick={() => setShowPublish(true)} className="inline-flex items-center gap-2 h-9 px-3.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors cursor-pointer">
+            <Globe className="w-4 h-4" />
+            <span className="hidden sm:inline">Publish</span>
+          </button>
+          <button onClick={download} className="neu-btn h-9 px-3 text-sm font-medium text-foreground hidden sm:inline-flex">
             <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">Download</span>
+            Download
           </button>
         </div>
       </header>
@@ -424,6 +431,18 @@ export function LandingEditor({ template, onClose }: { template: EditableTemplat
           )}
         </main>
       </div>
+
+      {showPublish && (
+        <PublishModal
+          defaultSlug={slug(pageName)}
+          defaultTitle={pageName}
+          templateId={template.id}
+          getHtml={finalHtml}
+          theme="stripe-indigo"
+          onClose={() => setShowPublish(false)}
+          toast={toast}
+        />
+      )}
     </div>
   );
 }
