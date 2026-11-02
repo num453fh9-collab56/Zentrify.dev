@@ -9,6 +9,7 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Code2, Copy, Download, Eye, PenLi
 import { ClassicCard, PremiumBadge, PremiumCard } from "./gallery";
 import { editableTemplates } from "./editable";
 import { LandingEditor } from "./editor/landing-editor";
+import { AiAssistant } from "./ai-assistant";
 
 type TemplateMod = { [key: string]: unknown[] };
 
@@ -458,6 +459,18 @@ export default function LandingPageGeneratorPage() {
     pushedEditor.current = false;
   };
 
+  const handleAiFill = (templateId: string, aiValues: Record<string, Record<string, unknown>>) => {
+    const tpl = editableTemplates[templateId];
+    if (!tpl) return;
+    const merged: Record<string, Record<string, unknown>> = {};
+    for (const [section, defaults] of Object.entries(tpl.defaults.values)) {
+      merged[section] = { ...defaults, ...(aiValues[section] ?? {}) };
+    }
+    const content = { enabled: { ...tpl.defaults.enabled }, values: merged };
+    localStorage.setItem(`zentrify:landing:${templateId}:v1`, JSON.stringify(content));
+    openEditor(templateId);
+  };
+
   const handleCopy = () => {
     if (!selectedTemplate) return;
     navigator.clipboard.writeText(selectedTemplate.getCode(activeTheme));
@@ -547,6 +560,13 @@ export default function LandingPageGeneratorPage() {
 
       {!selectedTemplate ? (
         <>
+          <AiAssistant
+            templates={filtered}
+            editableTemplates={editableTemplates}
+            selectedTemplateId={null}
+            onFillTemplate={handleAiFill}
+          />
+
           {premium.length > 0 && (
             <section className="mb-16">
               <div className="flex items-end justify-between gap-4 mb-6">
