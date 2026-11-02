@@ -1,9 +1,8 @@
 import type { Content, EditableTemplate, Section } from "../editor/types";
 import { esc, previewScript, reader, safeColor, safeUrl } from "../editor/html";
 
-const CDN = "https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P";
-const HERO_IMG = `${CDN}/18a4a3c1-2af7-4c4a-9045-f6ddff26f4ca.jpg`;
-const HERO_VID = `${CDN}/823d013d-bf03-4967-b08f-63c3752df435.mp4`;
+const HERO_IMG = "https://images.pexels.com/photos/3639709/pexels-photo-3639709.jpeg?auto=compress&cs=tinysrgb&w=1920";
+const HERO_VID = "https://videos.pexels.com/video-files/4384957/4384957-hd_1920_1080_30fps.mp4";
 
 const schema: Section[] = [
   {

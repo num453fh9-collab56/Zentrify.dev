@@ -13,7 +13,7 @@ export const premiumTemplates = [
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@75..150,100..900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--ice:#44DAFD;--cream:#F3F1E9;--ink:#0A2238;--plate:url("https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/18a4a3c1-2af7-4c4a-9045-f6ddff26f4ca.jpg")}
+:root{--ice:#44DAFD;--cream:#F3F1E9;--ink:#0A2238;--plate:url("https://images.pexels.com/photos/3639709/pexels-photo-3639709.jpeg?auto=compress&cs=tinysrgb&w=1920")}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}body{font-family:'Inter',sans-serif;background:#dfe8ef;color:#fff;overflow-x:hidden}
 .k-desktop{position:relative;width:100vw;height:100vh;overflow:hidden;background:#dfe8ef}
 .k-canvas{position:absolute;width:1546px;height:1017px;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--k,1));transform-origin:center center}
@@ -136,8 +136,8 @@ export const premiumTemplates = [
 <div class="k-desktop">
 <div class="k-canvas">
 <div class="k-plate">
-<img src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/18a4a3c1-2af7-4c4a-9045-f6ddff26f4ca.jpg" alt="Skier in white puffer suit and ice-blue goggles">
-<video class="k-video" muted loop playsinline autoplay preload="auto" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/18a4a3c1-2af7-4c4a-9045-f6ddff26f4ca.jpg"><source src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/823d013d-bf03-4967-b08f-63c3752df435.mp4" type="video/mp4"></video>
+<img src="https://images.pexels.com/photos/3639709/pexels-photo-3639709.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Skier in white puffer suit and ice-blue goggles">
+<video class="k-video" muted loop playsinline autoplay preload="auto" poster="https://images.pexels.com/photos/3639709/pexels-photo-3639709.jpeg?auto=compress&cs=tinysrgb&w=1920"><source src="https://videos.pexels.com/video-files/4384957/4384957-hd_1920_1080_30fps.mp4" type="video/mp4"></video>
 </div>
 <div class="k-shade"></div>
 <header class="k-head">
@@ -178,8 +178,8 @@ export const premiumTemplates = [
 </header>
 <section class="km-hero">
 <div class="km-plate">
-<img src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/18a4a3c1-2af7-4c4a-9045-f6ddff26f4ca.jpg" alt="Skier in white puffer suit and ice-blue goggles">
-<video class="km-video" muted loop playsinline autoplay preload="auto" poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/18a4a3c1-2af7-4c4a-9045-f6ddff26f4ca.jpg"><source src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/823d013d-bf03-4967-b08f-63c3752df435.mp4" type="video/mp4"></video>
+<img src="https://images.pexels.com/photos/3639709/pexels-photo-3639709.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Skier in white puffer suit and ice-blue goggles">
+<video class="km-video" muted loop playsinline autoplay preload="auto" poster="https://images.pexels.com/photos/3639709/pexels-photo-3639709.jpeg?auto=compress&cs=tinysrgb&w=1920"><source src="https://videos.pexels.com/video-files/4384957/4384957-hd_1920_1080_30fps.mp4" type="video/mp4"></video>
 <div class="km-shade"></div>
 </div>
 <div class="km-copy">
