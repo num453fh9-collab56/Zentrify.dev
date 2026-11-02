@@ -30,6 +30,7 @@ function useTemplateModules() {
       import("./jungle-templates"),
       import("./restaurant-aura-template"),
       import("./luxury-realestate-template"),
+      import("./motion-templates"),
     ]).then((mods) => {
       setExtra(mods.map((m: TemplateMod) => {
         const key = Object.keys(m).find((k) => Array.isArray(m[k]));
@@ -341,6 +342,11 @@ const skipEnhance = new Set([
   "jungle-plant-shop", "jungle-survival-academy", "jungle-documentary",
   "jungle-herbal-medicine", "jungle-eco-fashion", "jungle-tropical-farm",
   "jungle-reptile-zoo", "jungle-charity", "jungle-yoga-retreat",
+  "motion-cyber-shield", "motion-glass-product", "motion-holo-finance",
+  "motion-kinetic-agency", "motion-neon-arcade", "motion-neural-ai",
+  "motion-velocity-auto", "motion-marble-estate", "motion-titan-fitness",
+  "motion-horizon-travel", "motion-pulse-health", "motion-aperture-photo",
+  "motion-nova-edu", "motion-elan-fashion",
 ]);
 // Hand-picked highest quality templates, in showcase order. Everything else is "Classic".
 const premiumIds = [
@@ -349,6 +355,11 @@ const premiumIds = [
   "premium-aster-health", "premium-fern-finance", "premium-forge-athletics", "premium-atelier-nord",
   "premium-kairn-alpine", "premium-lumen-skin", "premium-dune-atlas", "immersive-casaalba",
   "portfolio-bento", "immersive-stillwild", "jungle-treehouse-hotel", "events-everafter",
+  "motion-cyber-shield", "motion-glass-product", "motion-holo-finance",
+  "motion-kinetic-agency", "motion-neon-arcade", "motion-neural-ai",
+  "motion-velocity-auto", "motion-marble-estate", "motion-titan-fitness",
+  "motion-horizon-travel", "motion-pulse-health", "motion-aperture-photo",
+  "motion-nova-edu", "motion-elan-fashion",
 ];
 const premiumSet = new Set(premiumIds);
 
@@ -359,6 +370,7 @@ function buildAllTemplates(inlineTemplates: Template[], extraModules: unknown[][
   const [
     saasPremium, advanced, extra, premium, premiumB, premiumC,
     immersive, immersiveB, immersiveC, jungle, restaurantAura, luxuryRealEstate,
+    motion,
   ] = extraModules as Template[][];
 
   const raw = [
@@ -375,6 +387,7 @@ function buildAllTemplates(inlineTemplates: Template[], extraModules: unknown[][
     ...(jungle || []),
     ...(restaurantAura || []),
     ...(luxuryRealEstate || []),
+    ...(motion || []),
   ];
 
   return raw.map(tpl =>
