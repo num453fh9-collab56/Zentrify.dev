@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { useToast } from "../../components/toast";
 import { ToolPageHeader } from "../../components/tool-page-header";
 
 type DiffType = "equal" | "added" | "removed";
@@ -44,7 +43,6 @@ function computeDiff(oldText: string, newText: string): DiffLine[] {
 }
 
 export default function TextDiffCheckerPage() {
-  const { toast } = useToast();
   const [oldText, setOldText] = useState("");
   const [newText, setNewText] = useState("");
 

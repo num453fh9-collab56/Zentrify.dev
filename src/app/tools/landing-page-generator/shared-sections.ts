@@ -67,7 +67,7 @@ textarea.cfi{min-height:100px;resize:vertical;margin-bottom:.8rem}
 `;
 }
 
-export function premiumDarkHTML(t: T) {
+export function premiumDarkHTML(_t: T) {
   return `
 <section class="full-banner reveal"><img src="${IMG.banner}" alt=""><div class="bo"><h2>See it in action</h2><p>Trusted by teams worldwide to build, ship, and scale.</p></div></section>
 <section class="pg">
@@ -146,7 +146,7 @@ export function enhanceLight(html: string, t: T): string {
   return html;
 }
 
-export function premiumLightHTML(t: T) {
+export function premiumLightHTML(_t: T) {
   return `
 <section class="full-banner reveal"><img src="${IMG.banner}" alt=""><div class="bo"><h2>See it in action</h2><p>Trusted by teams worldwide to build, ship, and scale.</p></div></section>
 <section class="pg">

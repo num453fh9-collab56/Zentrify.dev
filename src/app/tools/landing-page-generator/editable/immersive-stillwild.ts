@@ -1,4 +1,4 @@
-import type { Content, EditableTemplate, Item, Section } from "../editor/types";
+import type { Content, EditableTemplate, Section } from "../editor/types";
 import { esc, previewScript, reader, safeUrl } from "../editor/html";
 
 const U = (id: string, size: string) => `https://images.unsplash.com/${id}?${size}&fit=crop&auto=format&q=80`;

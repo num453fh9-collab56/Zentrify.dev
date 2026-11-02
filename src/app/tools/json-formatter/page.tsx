@@ -5,7 +5,6 @@ import { useToast } from "../../components/toast";
 import { ToolPageHeader } from "../../components/tool-page-header";
 
 type IndentType = "2" | "4" | "tab";
-type ViewMode = "raw" | "tree";
 
 function getIndent(type: IndentType): string | number {
   if (type === "tab") return "\t";
@@ -31,12 +30,24 @@ function sortObjectKeys(obj: unknown): unknown {
 function tryFixJson(json: string): string {
   let fixed = json.trim();
   fixed = fixed.replace(/,\s*([}\]])/g, "$1");
-  fixed = fixed.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, (match, p1, p2, p3, p4, offset, string) => {
+  fixed = fixed.replace(/(['"])?([a-zA-Z0-9_]+)(['"])?:/g, (match, p1, p2, p3) => {
     if (p1 || p3) return match;
     return `"${p2}":`;
   });
   fixed = fixed.replace(/'/g, '"');
   return fixed;
+}
+
+function countKeys(obj: unknown): number {
+  if (Array.isArray(obj)) {
+    return obj.reduce((acc, item) => acc + countKeys(item), 0);
+  }
+  if (obj !== null && typeof obj === "object") {
+    return Object.keys(obj as Record<string, unknown>).reduce((acc, key) => {
+      return acc + 1 + countKeys((obj as Record<string, unknown>)[key]);
+    }, 0);
+  }
+  return 0;
 }
 
 export default function JSONFormatterPage() {
@@ -46,20 +57,7 @@ export default function JSONFormatterPage() {
   const [error, setError] = useState("");
   const [indent, setIndent] = useState<IndentType>("2");
   const [sortKeys, setSortKeys] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("raw");
   const [stats, setStats] = useState<{ inputSize: number; outputSize: number; keys: number } | null>(null);
-
-  const countKeys = (obj: unknown): number => {
-    if (Array.isArray(obj)) {
-      return obj.reduce((acc, item) => acc + countKeys(item), 0);
-    }
-    if (obj !== null && typeof obj === "object") {
-      return Object.keys(obj as Record<string, unknown>).reduce((acc, key) => {
-        return acc + 1 + countKeys((obj as Record<string, unknown>)[key]);
-      }, 0);
-    }
-    return 0;
-  };
 
   const format = useCallback(() => {
     if (!input.trim()) {
@@ -155,7 +153,7 @@ export default function JSONFormatterPage() {
       navigator.clipboard.writeText(js).then(() => {
         toast("Copied as JS Object!");
       });
-    } catch (e) {
+    } catch {
       toast("Invalid JSON", "error");
     }
   }, [input, sortKeys, toast]);

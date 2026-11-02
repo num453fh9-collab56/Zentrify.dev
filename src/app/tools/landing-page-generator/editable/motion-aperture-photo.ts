@@ -1,4 +1,4 @@
-import type { Content, EditableTemplate, Item, Section } from "../editor/types";
+import type { Content, EditableTemplate, Section } from "../editor/types";
 import { csv, esc, previewScript, reader, revealCss, revealScript, safeColor, safeUrl } from "../editor/html";
 
 const schema: Section[] = [

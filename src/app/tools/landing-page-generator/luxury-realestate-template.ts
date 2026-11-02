@@ -10,7 +10,7 @@ export const luxuryRealEstateTemplates = [
     category: "Real Estate",
     description: "Premium dark real estate landing with gold accents, property hero, suite cards, amenities, stats bar, booking form, and WhatsApp float.",
     thumb: "🏙️",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">

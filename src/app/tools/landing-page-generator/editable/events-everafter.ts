@@ -1,7 +1,6 @@
 import type { Content, EditableTemplate, Section } from "../editor/types";
 import {
   esc,
-  emph,
   previewScript,
   reader,
   revealCss,
@@ -178,15 +177,6 @@ const defaults: Content = {
   },
 };
 
-function emphItalic(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, (m, offset, src) => {
-    if (src.slice(offset).match(/^<br\s*\/?>/i)) return m;
-    return "&lt;";
-  }).replace(/>/g, (m, offset, src) => {
-    if (src.slice(0, offset + 1).match(/<br\s*\/?>$/i)) return m;
-    return "&gt;";
-  }).replace(/"/g, "&quot;").replace(/'/g, "&#39;").replace(/\*(.+?)\*/g, "<em>$1</em>");
-}
 
 function heroTitle(raw: string): string {
   const safe = esc(raw).replace(/&lt;br\s*\/?&gt;/gi, "<br>");

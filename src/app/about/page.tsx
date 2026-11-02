@@ -226,7 +226,7 @@ export default function AboutPage() {
               <h2 className="text-2xl sm:text-4xl heading-lg mb-4">Want to Contribute?</h2>
               <p className="body-lg max-w-lg mx-auto mb-8 text-lg">
                 Zentrify is actively growing. Have a tool idea or found a bug?
-                <span className="text-foreground font-medium"> We'd love to hear from you.</span>
+                <span className="text-foreground font-medium"> We&apos;d love to hear from you.</span>
               </p>
               <Link
                 href="/contact"

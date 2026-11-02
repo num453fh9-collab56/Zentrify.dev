@@ -23,7 +23,7 @@ export default function UUIDGeneratorPage() {
   const [uuids, setUuids] = useState<string[]>([]);
 
   useEffect(() => {
-    setUuids([generateUUID()]);
+    setUuids([generateUUID()]); // eslint-disable-line react-hooks/set-state-in-effect -- SSR-safe initial value
   }, []);
 
   const generate = useCallback(() => {

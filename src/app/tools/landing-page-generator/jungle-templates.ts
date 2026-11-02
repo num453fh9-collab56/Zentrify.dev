@@ -9,7 +9,7 @@ export const jungleTemplates = [
     category: "Nature / Jungle",
     description: "Dark misty forest hero, animated leaf particles, donate CTA, tree counter stats, impact timeline, and volunteer signup.",
     thumb: "🌲",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -64,7 +64,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(74,222,128,.06);text-align:cent
     category: "Nature / Jungle",
     description: "Full-screen tiger hero, safari tour booking cards, animal species gallery with hover facts, guide profiles, and expedition pricing table.",
     thumb: "🐯",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -127,7 +127,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(212,165,90,.06);text-align:cent
     category: "Nature / Jungle",
     description: "Full-screen waterfall hero with parallax depth, adventure activity grid with difficulty badges, packing checklist, and expedition booking form.",
     thumb: "🏞️",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -201,7 +201,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(52,211,153,.05);text-align:cent
     category: "Nature / Jungle",
     description: "Luxury treehouse resort with warm amber tones, room type cards with glass morphism, amenity icons, guest reviews, and reservation form with date picker.",
     thumb: "🏡",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -275,7 +275,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(201,169,110,.06);text-align:cen
     category: "Nature / Jungle",
     description: "Light green/white botanical theme with watercolor-style sections, plant gallery with Latin names, event calendar cards, and membership signup.",
     thumb: "🌺",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -348,7 +348,7 @@ footer{padding:3rem 5%;text-align:center;font-size:.8rem;color:#bbb;border-top:1
     category: "Nature / Jungle",
     description: "Photographer portfolio with full-bleed masonry gallery, camera settings overlay on hover, behind-the-scenes section, and print shop CTA.",
     thumb: "📸",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -404,7 +404,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(141,181,128,.06);text-align:cen
     category: "Nature / Jungle",
     description: "E-commerce for exotic tropical plants with product grid, care difficulty indicators, plant care guide section, and subscription box CTA.",
     thumb: "🪴",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -470,7 +470,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(34,197,94,.06);text-align:cente
     category: "Nature / Jungle",
     description: "Military-style dark design with course tier cards, skill badges, instructor credentials, equipment checklist, and enrollment form with cohort dates.",
     thumb: "🔥",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -537,7 +537,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(245,158,11,.05);text-align:cent
     category: "Nature / Jungle",
     description: "Cinematic film landing with widescreen hero, trailer embed placeholder, episode cards, award badges, behind-the-scenes gallery, and streaming CTA.",
     thumb: "🎬",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -603,7 +603,7 @@ nav ul{list-style:none;display:flex;gap:2rem}nav ul a{font-size:.8rem;opacity:.4
     category: "Nature / Jungle",
     description: "Warm earthy tones with botanical illustrations, remedy cards, ingredient sourcing map, wellness quiz teaser, and herbal consultation booking.",
     thumb: "🍵",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -665,7 +665,7 @@ footer{padding:3rem 5%;text-align:center;font-size:.8rem;color:#ccc;border-top:1
     category: "Nature / Jungle",
     description: "Sustainable fashion brand with earth-tone palette, ethical sourcing badges, product lookbook grid, impact counter, and newsletter with nature imagery.",
     thumb: "👗",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -729,7 +729,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(107,143,94,.06);text-align:cent
     category: "Nature / Jungle",
     description: "Vibrant farm-to-table with fruit product cards, seasonal harvest calendar, farm tour booking, organic certification badges, and subscription box.",
     thumb: "🥭",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -790,7 +790,7 @@ footer{padding:3rem 5%;text-align:center;font-size:.8rem;color:#ccc;border-top:1
     category: "Nature / Jungle",
     description: "Dark emerald theme with species cards featuring fun facts, interactive exhibit map teaser, feeding schedule, conservation status badges, and ticket booking.",
     thumb: "🦎",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -858,7 +858,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(34,197,94,.05);text-align:cente
     category: "Nature / Jungle",
     description: "Light theme charity page with donation tiers, impact calculator, project gallery, transparent spending breakdown, and emotional hero with child holding seedling.",
     thumb: "💚",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -925,7 +925,7 @@ footer{padding:3rem 5%;text-align:center;font-size:.8rem;color:#ccc;border-top:1
     category: "Nature / Jungle",
     description: "Serene jungle retreat with misty morning hero, class schedule grid, instructor profiles with specialties, wellness package pricing, and booking form.",
     thumb: "🧘",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -998,7 +998,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(163,196,140,.06);text-align:cen
     category: "Nature / Jungle",
     description: "Adrenaline jungle adventure park with full-screen canopy hero, zipline route map, difficulty levels, safety badges, group booking and aerial photo gallery.",
     thumb: "🪢",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -1069,7 +1069,7 @@ footer{padding:2.5rem 5%;border-top:1px solid rgba(74,222,128,.06);text-align:ce
     category: "Nature / Jungle",
     description: "Ultra-luxury jungle treehouse hotel with cinematic canopy hero, room tier cards with photos, amenity icons, jungle spa section, and ambient booking form.",
     thumb: "🌳",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -1138,7 +1138,7 @@ footer{padding:3rem 5%;border-top:1px solid rgba(201,169,110,.06);text-align:cen
     category: "Nature / Jungle",
     description: "Dramatic dark night-safari page with bioluminescent accents, nocturnal animal cards with glowing eyes, night tour packages, infrared photo gallery, and stargazing add-on.",
     thumb: "🦉",
-    getCode: (t: T) => `<!DOCTYPE html>
+    getCode: (_t: T) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">

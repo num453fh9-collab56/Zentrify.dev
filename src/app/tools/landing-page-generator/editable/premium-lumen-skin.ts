@@ -192,12 +192,6 @@ function render(c: Content, options: Parameters<EditableTemplate["render"]>[1] =
 
   const splitParas = s("split", "text").split("\n\n").filter(Boolean).map((p) => `<p>${esc(p.trim())}</p>`).join("");
 
-  const stepGradients = [
-    [`color-mix(in srgb,${bg} 70%,${accent})`, `color-mix(in srgb,${bg} 60%,${accent})`],
-    [`color-mix(in srgb,${bg} 65%,${accent})`, `color-mix(in srgb,${bg} 55%,${accent})`],
-    [`color-mix(in srgb,${bg} 60%,${accent})`, `color-mix(in srgb,${bg} 50%,${accent})`],
-  ];
-
   const navLinks = [
     r.on("ritual") ? `<li><a href="#ritual">The ritual</a></li>` : "",
   ].filter(Boolean).join("");

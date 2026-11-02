@@ -44,7 +44,7 @@ function md5(input: string): string {
   for (let i = 0; i < padLen * 64; i += 64) {
     const x: number[] = [];
     for (let j = 0; j < 16; j++) x[j] = view.getInt32(i + j * 4, true);
-    let aa = a, bb = b, cc = c, dd = d;
+    const aa = a, bb = b, cc = c, dd = d;
 
     a = md5ff(a, b, c, d, x[0], 7, -680876936); d = md5ff(d, a, b, c, x[1], 12, -389564586);
     c = md5ff(c, d, a, b, x[2], 17, 606105819); b = md5ff(b, c, d, a, x[3], 22, -1044525330);

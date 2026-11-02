@@ -1,7 +1,6 @@
 import type { Content, EditableTemplate, Section } from "../editor/types";
 import {
   esc,
-  emph,
   previewScript,
   reader,
   revealCss,

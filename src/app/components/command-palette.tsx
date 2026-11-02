@@ -102,10 +102,6 @@ export function CommandPalette() {
     return items;
   }, [results]);
 
-  useEffect(() => {
-    setSelected(0);
-  }, [query]);
-
   const navigate = useCallback(
     (href: string) => {
       trackToolVisit(href);
@@ -120,9 +116,9 @@ export function CommandPalette() {
     const down = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        setOpen((v) => !v);
+        setOpen((v) => { if (v) setQuery(""); return !v; });
       }
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") { setOpen(false); setQuery(""); }
     };
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
@@ -131,8 +127,6 @@ export function CommandPalette() {
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
-      setQuery("");
     }
   }, [open]);
 
@@ -184,7 +178,7 @@ export function CommandPalette() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm"
-              onClick={() => setOpen(false)}
+              onClick={() => { setOpen(false); setQuery(""); }}
             />
 
             {/* Dialog */}
@@ -204,7 +198,7 @@ export function CommandPalette() {
                   <input
                     ref={inputRef}
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={(e) => { setQuery(e.target.value); setSelected(0); }}
                     onKeyDown={handleKeyDown}
                     placeholder="Search tools, pages..."
                     className="flex-1 py-3.5 bg-transparent text-sm outline-none placeholder:text-muted"

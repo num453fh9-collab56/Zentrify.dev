@@ -35,12 +35,12 @@
 [data-theme="dark"] {
   --background: #0a0f1a;
   --foreground: #e8ecf2;
-  --primary: #7bc67e;
-  --primary-dark: #4a9e5c;
-  --primary-light: #a3d9a5;
+  --primary: #a78bda;
+  --primary-dark: #8c6fc4;
+  --primary-light: #c4aeed;
   --success: #34c9a0;
   --success-dark: #1a7a5c;
-  --accent: #7ad4ec;
+  --accent: #5ec6c0;
   --warning: #f5d060;
   --error: #f06070;
   --purple: #a87fd4;

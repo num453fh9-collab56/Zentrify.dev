@@ -276,7 +276,7 @@ export default function CodeMinifierPage() {
 
   useEffect(() => {
     if (autoMinify && input.trim()) {
-      setOutput(minify(input, lang));
+      setOutput(minify(input, lang)); // eslint-disable-line react-hooks/set-state-in-effect -- reactive auto-minify
     }
   }, [input, lang, autoMinify]);
 
@@ -299,19 +299,6 @@ export default function CodeMinifierPage() {
       toast(`Copied! (${formatBytes(new TextEncoder().encode(output).length)})`);
     });
   }, [output, toast]);
-
-  const download = useCallback(() => {
-    if (!output) return;
-    const ext = lang === "javascript" ? "js" : lang;
-    const blob = new Blob([output], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `minified.${ext}`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast("Downloaded!");
-  }, [output, lang, toast]);
 
   const clearAll = useCallback(() => {
     setInput("");

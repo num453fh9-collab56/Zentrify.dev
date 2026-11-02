@@ -73,7 +73,7 @@ export default function LoremIpsumGeneratorPage() {
   const [output, setOutput] = useState("");
 
   useEffect(() => {
-    setOutput(generate("paragraphs", 3, true));
+    setOutput(generate("paragraphs", 3, true)); // eslint-disable-line react-hooks/set-state-in-effect -- SSR-safe initial value
   }, []);
 
   const handleGenerate = useCallback(() => {

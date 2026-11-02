@@ -94,6 +94,7 @@ export default function ImageToBase64Page() {
         >
           {preview ? (
             <div className="space-y-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={preview}
                 alt="Preview"

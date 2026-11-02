@@ -1,5 +1,5 @@
 import type { Content, EditableTemplate, Section } from "../editor/types";
-import { esc, previewScript, reader, revealCss, revealScript, safeColor, safeUrl } from "../editor/html";
+import { esc, previewScript, reader, revealCss, revealScript, safeColor } from "../editor/html";
 
 const schema: Section[] = [
   {

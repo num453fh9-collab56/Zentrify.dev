@@ -58,7 +58,7 @@ export default function PasswordGeneratorPage() {
   const [history, setHistory] = useState<string[]>([]);
 
   useEffect(() => {
-    setPassword(generatePassword(16, true, true, true, true));
+    setPassword(generatePassword(16, true, true, true, true)); // eslint-disable-line react-hooks/set-state-in-effect -- SSR-safe initial value
   }, []);
 
   const generate = useCallback(() => {
