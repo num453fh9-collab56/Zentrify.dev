@@ -30,6 +30,7 @@ const menuColumns = [["developer", "security"], ["design", "text"], ["converter"
 const toolCount = Object.keys(toolConfig).length;
 
 const links = [
+  { href: "/dashboard", label: "My Pages" },
   { href: "/about", label: "About" },
 ];
 
