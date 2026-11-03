@@ -18,7 +18,7 @@ export async function GET(
 
   pagesStore.incrementViews(page.id).catch(() => {});
 
-  const ogUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://zentrify.vercel.app"}/p/${page.slug}`;
+  const ogUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://zentrify-dev-vy8l.vercel.app"}/p/${page.slug}`;
 
   const html = `<!doctype html>
 <html lang="en">

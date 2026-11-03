@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://zentrify.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://zentrify-dev-vy8l.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const tools = [
@@ -55,6 +55,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/dashboard`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.6,
     },
     {
       url: `${BASE_URL}/privacy`,
