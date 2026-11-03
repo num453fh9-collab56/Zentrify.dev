@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { Suspense, useState, useCallback, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "../../components/toast";
 import { ToolPageHeader } from "../../components/tool-page-header";
@@ -149,6 +149,14 @@ const CopyIcon = () => (
 );
 
 export default function PasswordGeneratorPage() {
+  return (
+    <Suspense fallback={<div className="py-20 text-center text-muted">Loading...</div>}>
+      <PasswordGenerator />
+    </Suspense>
+  );
+}
+
+function PasswordGenerator() {
   const { toast } = useToast();
   const [tab, setTab] = useState<Tab>("generate");
   const [mode, setMode] = useState<Mode>("password");
