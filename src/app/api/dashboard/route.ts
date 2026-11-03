@@ -1,41 +1,48 @@
 import { NextRequest } from "next/server";
 import { pagesStore } from "@/lib/pages-store";
 
+function pageDto(page: { id: string; slug: string; title: string; templateId: string; theme: string; views: number; createdAt: string; updatedAt: string }) {
+  return {
+    id: page.id,
+    slug: page.slug,
+    title: page.title,
+    templateId: page.templateId,
+    theme: page.theme,
+    views: page.views,
+    createdAt: page.createdAt,
+    updatedAt: page.updatedAt,
+  };
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { tokens } = await req.json() as { tokens: Record<string, string> };
+    const body = await req.json() as { tokens?: Record<string, string>; userId?: string };
 
-    if (!tokens || typeof tokens !== "object") {
-      return Response.json({ error: "tokens object required" }, { status: 400 });
+    const allPages: ReturnType<typeof pageDto>[] = [];
+
+    // Fetch by userId (logged-in user)
+    if (body.userId) {
+      const userPages = await pagesStore.listByUserId(body.userId);
+      for (const p of userPages) allPages.push(pageDto(p));
     }
 
-    const entries = Object.entries(tokens);
-    if (entries.length === 0) {
-      return Response.json({ pages: [] });
-    }
-
-    const pages = (
+    // Fetch by editTokens (localStorage fallback)
+    if (body.tokens && typeof body.tokens === "object") {
+      const entries = Object.entries(body.tokens);
+      const existing = new Set(allPages.map((p) => p.id));
       await Promise.all(
         entries.map(async ([id, editToken]) => {
+          if (existing.has(id)) return;
           const page = await pagesStore.getById(id);
-          if (!page || page.editToken !== editToken) return null;
-          return {
-            id: page.id,
-            slug: page.slug,
-            title: page.title,
-            templateId: page.templateId,
-            theme: page.theme,
-            views: page.views,
-            createdAt: page.createdAt,
-            updatedAt: page.updatedAt,
-          };
+          if (!page || page.editToken !== editToken) return;
+          allPages.push(pageDto(page));
         }),
-      )
-    ).filter(Boolean);
+      );
+    }
 
-    pages.sort((a, b) => new Date(b!.updatedAt).getTime() - new Date(a!.updatedAt).getTime());
+    allPages.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
-    return Response.json({ pages });
+    return Response.json({ pages: allPages });
   } catch {
     return Response.json({ error: "Internal server error" }, { status: 500 });
   }

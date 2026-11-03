@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { m, AnimatePresence } from "framer-motion";
 import {
   BarChart3,
@@ -16,6 +17,7 @@ import {
   Trash2,
   LayoutDashboard,
 } from "lucide-react";
+import { useAuth } from "../components/auth-provider";
 
 interface PageItem {
   id: string;
@@ -58,25 +60,30 @@ function timeAgo(dateStr: string): string {
 }
 
 export default function DashboardPage() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [pages, setPages] = useState<PageItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/login");
+    }
+  }, [authLoading, user, router]);
+
   const fetchPages = useCallback(async () => {
     const tokens = getTokens();
-    if (Object.keys(tokens).length === 0) {
-      setPages([]);
-      setLoading(false);
-      return;
-    }
+    const body: Record<string, unknown> = { tokens };
+    if (user) body.userId = user.id;
 
     try {
       const res = await fetch("/api/dashboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tokens }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       setPages(data.pages ?? []);
@@ -85,11 +92,11 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    fetchPages();
-  }, [fetchPages]);
+    if (!authLoading) fetchPages();
+  }, [authLoading, fetchPages]);
 
   const copyLink = async (slug: string, id: string) => {
     try {

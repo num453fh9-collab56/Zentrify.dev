@@ -10,6 +10,7 @@ export interface PublishedPage {
   html: string;
   theme: string;
   editToken: string;
+  userId: string | null;
   createdAt: string;
   updatedAt: string;
   views: number;
@@ -21,6 +22,7 @@ export type CreatePageInput = {
   templateId: string;
   html: string;
   theme: string;
+  userId?: string;
 };
 
 export type UpdatePageInput = Partial<
@@ -35,6 +37,7 @@ interface PagesStore {
   remove(id: string, editToken: string): Promise<boolean>;
   incrementViews(id: string): Promise<void>;
   listByToken(editToken: string): Promise<PublishedPage[]>;
+  listByUserId(userId: string): Promise<PublishedPage[]>;
 }
 
 // --------------- File-based store (local dev) ---------------
@@ -61,6 +64,7 @@ const fileStore: PagesStore = {
       html: input.html,
       theme: input.theme,
       editToken: randomUUID(),
+      userId: input.userId ?? null,
       createdAt: now,
       updatedAt: now,
       views: 0,
@@ -128,6 +132,19 @@ const fileStore: PagesStore = {
     }
     return pages;
   },
+
+  async listByUserId(userId) {
+    await ensureDir();
+    const files = await readdir(DATA_DIR);
+    const pages: PublishedPage[] = [];
+    for (const f of files) {
+      if (!f.endsWith(".json")) continue;
+      const raw = await readFile(path.join(DATA_DIR, f), "utf-8");
+      const page: PublishedPage = JSON.parse(raw);
+      if (page.userId === userId) pages.push(page);
+    }
+    return pages;
+  },
 };
 
 // --------------- Supabase store (production) ---------------
@@ -161,7 +178,7 @@ function getSupabaseStore(): PagesStore {
   return {
     async create(input) {
       const now = new Date().toISOString();
-      const page = {
+      const page: Record<string, unknown> = {
         id: randomUUID(),
         slug: input.slug,
         title: input.title,
@@ -173,6 +190,7 @@ function getSupabaseStore(): PagesStore {
         updated_at: now,
         views: 0,
       };
+      if (input.userId) page.user_id = input.userId;
       const rows = await query("published_pages", {
         method: "POST",
         body: JSON.stringify(page),
@@ -235,6 +253,13 @@ function getSupabaseStore(): PagesStore {
       });
       return (rows ?? []).map(toPage);
     },
+
+    async listByUserId(userId) {
+      const rows = await query("published_pages", {
+        params: { user_id: `eq.${userId}`, order: "updated_at.desc" },
+      });
+      return (rows ?? []).map(toPage);
+    },
   };
 }
 
@@ -247,6 +272,7 @@ function toPage(row: Record<string, unknown>): PublishedPage {
     html: row.html as string,
     theme: row.theme as string,
     editToken: (row.edit_token ?? row.editToken) as string,
+    userId: (row.user_id ?? row.userId ?? null) as string | null,
     createdAt: (row.created_at ?? row.createdAt) as string,
     updatedAt: (row.updated_at ?? row.updatedAt) as string,
     views: (row.views ?? 0) as number,

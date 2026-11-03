@@ -5,9 +5,10 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, LogIn, LogOut, Menu, User, X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { CommandPalette } from "./command-palette";
+import { useAuth } from "./auth-provider";
 import { toolConfig } from "../tools/tool-config";
 
 // Same categories, order and tints as the homepage tools grid
@@ -264,6 +265,83 @@ function MobileMenu({ pathname }: { pathname: string }) {
   );
 }
 
+function UserMenu() {
+  const { user, loading, signOut } = useAuth();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <Link
+        href="/login"
+        className="hidden lg:inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors"
+      >
+        <LogIn className="w-3.5 h-3.5" />
+        Sign in
+      </Link>
+    );
+  }
+
+  const name = (user.user_metadata?.full_name as string) || user.email || "User";
+  const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+
+  return (
+    <div ref={ref} className="relative hidden lg:block">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-8 h-8 rounded-full bg-primary/15 text-primary text-xs font-bold flex items-center justify-center hover:bg-primary/25 transition-colors cursor-pointer"
+        aria-label="User menu"
+      >
+        {initials}
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.12 }}
+            className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-surface-border bg-surface shadow-lg overflow-hidden"
+          >
+            <div className="px-4 py-3 border-b border-surface-border">
+              <p className="text-sm font-medium truncate">{name}</p>
+              <p className="text-xs text-muted truncate">{user.email}</p>
+            </div>
+            <div className="py-1">
+              <Link
+                href="/dashboard"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 px-4 py-2 text-sm text-foreground hover:bg-background transition-colors"
+              >
+                <User className="w-4 h-4 text-muted" />
+                My Pages
+              </Link>
+              <button
+                onClick={() => { signOut(); setOpen(false); }}
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign out
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export function NavBar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -311,6 +389,7 @@ export function NavBar() {
         <div className="ml-auto flex items-center gap-1.5">
           <CommandPalette />
           <ThemeToggle />
+          <UserMenu />
           <MobileMenu pathname={pathname} />
         </div>
       </div>
