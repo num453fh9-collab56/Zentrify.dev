@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import {
   BarChart3,
   ClipboardCopy,
@@ -132,7 +132,7 @@ export default function DashboardPage() {
     <section className="py-10 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
@@ -146,11 +146,11 @@ export default function DashboardPage() {
               <p className="text-sm text-muted">Manage your published landing pages</p>
             </div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Stats */}
         {!loading && pages.length > 0 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
@@ -176,12 +176,12 @@ export default function DashboardPage() {
                 <BarChart3 className="w-4 h-4 text-muted" />
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
 
         {/* Search + Create */}
         {!loading && pages.length > 0 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -205,7 +205,7 @@ export default function DashboardPage() {
               <span className="hidden sm:inline">Create New</span>
               <span className="sm:hidden">New</span>
             </Link>
-          </motion.div>
+          </m.div>
         )}
 
         {/* Loading */}
@@ -217,7 +217,7 @@ export default function DashboardPage() {
 
         {/* Empty State */}
         {!loading && pages.length === 0 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-20"
@@ -236,12 +236,12 @@ export default function DashboardPage() {
               <PenLine className="w-4 h-4" />
               Create your first page
             </Link>
-          </motion.div>
+          </m.div>
         )}
 
         {/* Pages List */}
         {!loading && filtered.length > 0 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
@@ -249,7 +249,7 @@ export default function DashboardPage() {
           >
             <AnimatePresence mode="popLayout">
               {filtered.map((page) => (
-                <motion.div
+                <m.div
                   key={page.id}
                   layout
                   initial={{ opacity: 0, y: 10 }}
@@ -317,10 +317,10 @@ export default function DashboardPage() {
                       </button>
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </AnimatePresence>
-          </motion.div>
+          </m.div>
         )}
 
         {/* No search results */}
