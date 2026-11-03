@@ -37,6 +37,9 @@ export const metadata: Metadata = {
     "tailwind shadow generator",
     "free online tools",
   ],
+  verification: {
+    google: "Xb1dtpJAuaRKySZuqitVhZi5XKPCdLp3L03-0PQ07RY",
+  },
   openGraph: {
     title: "Zentrify - Free Developer & Designer Tools",
     description:
