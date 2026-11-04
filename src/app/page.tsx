@@ -370,9 +370,14 @@ function ToolCard({ tool }: { tool: ToolItem }) {
   );
 }
 
+const INITIAL_COUNT = 6;
+
 export default function Home() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [showAll, setShowAll] = useState(false);
+
+  const isFiltering = search !== "" || activeCategory !== "all";
 
   const filteredTools = useMemo(() => {
     return tools.filter((tool) => {
@@ -520,10 +525,22 @@ export default function Home() {
 
           {/* Tools Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredTools.map((tool) => (
+            {(isFiltering ? filteredTools : filteredTools.slice(0, showAll ? undefined : INITIAL_COUNT)).map((tool) => (
               <ToolCard key={tool.href} tool={tool} />
             ))}
           </div>
+
+          {!isFiltering && !showAll && filteredTools.length > INITIAL_COUNT && (
+            <div className="text-center mt-8">
+              <button
+                onClick={() => setShowAll(true)}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-surface-border bg-surface text-sm font-semibold text-foreground hover:border-primary/40 hover:text-primary transition-colors cursor-pointer"
+              >
+                Show all {filteredTools.length} tools
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
 
           {filteredTools.length === 0 && (
             <m.div
