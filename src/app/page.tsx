@@ -326,10 +326,6 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
 };
 
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.92 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease } },
-};
 
 const popularTools = [
   { label: "JSON → TS", href: "/tools/json-to-typescript" },
@@ -340,44 +336,37 @@ const popularTools = [
 
 const categoryLabel = (id: string) => categories.find((c) => c.id === id)?.label ?? id;
 
-function ToolCard({ tool, index }: { tool: ToolItem; index: number }) {
+function ToolCard({ tool }: { tool: ToolItem }) {
   return (
-    <m.div
-      variants={scaleIn}
-      initial="hidden"
-      animate="visible"
-      transition={{ delay: index * 0.03 }}
+    <Link
+      href={tool.href}
+      style={{ "--cat": `var(--cat-${tool.category})` } as React.CSSProperties}
+      className="group flex flex-col h-full rounded-xl border border-surface-border bg-surface overflow-hidden transition-all duration-200 hover:border-cat/40 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.15)]"
     >
-      <Link
-        href={tool.href}
-        style={{ "--cat": `var(--cat-${tool.category})` } as React.CSSProperties}
-        className="group flex flex-col h-full rounded-xl border border-surface-border bg-surface overflow-hidden transition-all duration-200 hover:border-cat/40 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.15)]"
-      >
-        <div className="bg-cat/[0.06] border-b border-surface-border">
-          <ToolPreview href={tool.href} />
-        </div>
+      <div className="bg-cat/[0.06] border-b border-surface-border">
+        <ToolPreview href={tool.href} />
+      </div>
 
-        <div className="flex flex-col flex-1 p-5">
-          <div className="flex items-center justify-between gap-2 mb-1.5">
-            <h3 className="text-[15px] font-semibold text-foreground">{tool.name}</h3>
-            <ArrowRight className="w-4 h-4 text-muted opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-cat transition-all" />
-          </div>
-          <p className="text-[13px] text-muted leading-relaxed flex-1">{tool.description}</p>
-          <div className="flex items-center gap-2 mt-4 text-[11px] font-medium text-muted">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-cat" />
-              {categoryLabel(tool.category)}
-            </span>
-            {tool.badge && (
-              <>
-                <span aria-hidden="true">·</span>
-                <span className={tool.badge === "Popular" ? "text-cat" : ""}>{tool.badge}</span>
-              </>
-            )}
-          </div>
+      <div className="flex flex-col flex-1 p-5">
+        <div className="flex items-center justify-between gap-2 mb-1.5">
+          <h3 className="text-[15px] font-semibold text-foreground">{tool.name}</h3>
+          <ArrowRight className="w-4 h-4 text-muted opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-cat transition-all" />
         </div>
-      </Link>
-    </m.div>
+        <p className="text-[13px] text-muted leading-relaxed flex-1">{tool.description}</p>
+        <div className="flex items-center gap-2 mt-4 text-[11px] font-medium text-muted">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cat" />
+            {categoryLabel(tool.category)}
+          </span>
+          {tool.badge && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span className={tool.badge === "Popular" ? "text-cat" : ""}>{tool.badge}</span>
+            </>
+          )}
+        </div>
+      </div>
+    </Link>
   );
 }
 
@@ -531,8 +520,8 @@ export default function Home() {
 
           {/* Tools Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredTools.map((tool, i) => (
-              <ToolCard key={tool.href} tool={tool} index={i} />
+            {filteredTools.map((tool) => (
+              <ToolCard key={tool.href} tool={tool} />
             ))}
           </div>
 
