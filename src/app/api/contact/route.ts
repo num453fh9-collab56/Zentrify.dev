@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
 const RATE_LIMIT_WINDOW = 60_000;
 const MAX_REQUESTS = 3;
@@ -91,6 +92,17 @@ export async function POST(req: NextRequest) {
         { error: "Failed to save your message. Please try again." },
         { status: 500 },
       );
+    }
+
+    const resendKey = process.env.RESEND_API_KEY;
+    if (resendKey) {
+      const resend = new Resend(resendKey);
+      await resend.emails.send({
+        from: "Zentrify Contact <onboarding@resend.dev>",
+        to: "num453fh9@gmail.com",
+        subject: `New contact: ${subject} — from ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`,
+      }).catch(() => {});
     }
 
     return NextResponse.json({ success: true });
