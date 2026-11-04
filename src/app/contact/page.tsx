@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 type FormState = "idle" | "sending" | "success" | "error";
 
@@ -75,7 +75,7 @@ export default function ContactPage() {
     <section className="py-16 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* Hero */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -93,17 +93,17 @@ export default function ContactPage() {
           <p className="text-lg body-lg max-w-xl mx-auto">
             Have feedback, a tool suggestion, or just want to say hi? We&apos;d love to hear from you.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Info cards */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
           className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12"
         >
           {contactInfo.map((info, i) => (
-            <motion.div
+            <m.div
               key={info.title}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -121,14 +121,14 @@ export default function ContactPage() {
                 <p className="text-sm font-semibold">{info.value}</p>
                 <p className="text-xs text-muted mt-0.5">{info.desc}</p>
               </div>
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
 
         {/* Form + FAQ */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Form */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -257,10 +257,10 @@ export default function ContactPage() {
                 </div>
               </form>
             )}
-          </motion.div>
+          </m.div>
 
           {/* FAQ sidebar */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
@@ -292,7 +292,7 @@ export default function ContactPage() {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

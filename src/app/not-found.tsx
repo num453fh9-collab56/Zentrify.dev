@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 export default function NotFound() {
   return (
     <section className="py-20 px-4 sm:px-6 min-h-[70vh] flex items-center justify-center">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -42,7 +42,7 @@ export default function NotFound() {
             Browse Tools
           </Link>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

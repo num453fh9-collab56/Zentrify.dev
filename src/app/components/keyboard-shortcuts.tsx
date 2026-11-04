@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const shortcuts = [
@@ -52,14 +52,14 @@ export function KeyboardShortcuts() {
     <AnimatePresence>
       {open && (
         <>
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -99,7 +99,7 @@ export function KeyboardShortcuts() {
                 Press <kbd className="px-1 py-0.5 rounded bg-surface-border text-[10px] font-mono">?</kbd> to toggle this panel
               </p>
             </div>
-          </motion.div>
+          </m.div>
         </>
       )}
     </AnimatePresence>

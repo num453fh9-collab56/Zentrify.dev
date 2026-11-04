@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 const categories = [
   { id: "all", label: "All Tools", icon: "M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" },
@@ -52,7 +52,7 @@ export default function ToolsPage() {
   return (
     <section className="py-12 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-10"
@@ -61,10 +61,10 @@ export default function ToolsPage() {
           <p className="text-muted max-w-lg mx-auto">
             {tools.length} free developer & designer utilities. No signup, no tracking, runs in your browser.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Search */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
@@ -82,10 +82,10 @@ export default function ToolsPage() {
               className="w-full pl-10 pr-4 py-3 neu-input text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Category filters */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
@@ -107,13 +107,13 @@ export default function ToolsPage() {
               {cat.label}
             </button>
           ))}
-        </motion.div>
+        </m.div>
 
         {/* Tools grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimatePresence mode="popLayout">
             {filtered.map((tool, i) => (
-              <motion.div
+              <m.div
                 key={tool.href}
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -140,7 +140,7 @@ export default function ToolsPage() {
                     </svg>
                   </div>
                 </Link>
-              </motion.div>
+              </m.div>
             ))}
           </AnimatePresence>
         </div>

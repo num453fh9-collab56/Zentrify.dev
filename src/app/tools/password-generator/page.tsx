@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useCallback, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useToast } from "../../components/toast";
 import { ToolPageHeader } from "../../components/tool-page-header";
 
@@ -267,7 +267,7 @@ function PasswordGenerator() {
 
         {/* Generate Tab */}
         {tab === "generate" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             {/* Mode selector */}
             <div className="flex gap-2 mb-4">
               {(["password", "passphrase", "pronounceable"] as Mode[]).map((m) => (
@@ -435,12 +435,12 @@ function PasswordGenerator() {
                 </div>
               </div>
             )}
-          </motion.div>
+          </m.div>
         )}
 
         {/* Analyze Tab */}
         {tab === "analyze" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="neu-card p-6">
               <h2 className="text-sm font-semibold mb-3">Password Strength Analyzer</h2>
               <p className="text-xs text-muted mb-4">Paste any password to analyze its strength, entropy, and detect common patterns.</p>
@@ -507,12 +507,12 @@ function PasswordGenerator() {
                 </div>
               )}
             </div>
-          </motion.div>
+          </m.div>
         )}
 
         {/* Bulk Tab */}
         {tab === "bulk" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="neu-card p-6 mb-4">
               <h2 className="text-sm font-semibold mb-3">Bulk Generator</h2>
 
@@ -579,7 +579,7 @@ function PasswordGenerator() {
                 </>
               )}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </div>
     </section>

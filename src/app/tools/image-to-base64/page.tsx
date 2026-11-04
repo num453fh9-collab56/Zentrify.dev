@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useToast } from "../../components/toast";
 import { ToolPageHeader } from "../../components/tool-page-header";
 
@@ -242,7 +242,7 @@ export default function ImageToBase64Page() {
         </div>
 
         {/* Settings row */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="neu-card p-4 mb-5">
+        <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="neu-card p-4 mb-5">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {/* Output format */}
             <div>
@@ -306,7 +306,7 @@ export default function ImageToBase64Page() {
           {/* Resize inputs */}
           <AnimatePresence>
             {resizeEnabled && (
-              <motion.div
+              <m.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
@@ -343,15 +343,15 @@ export default function ImageToBase64Page() {
                     Apply
                   </button>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </m.div>
 
         {/* Image list */}
         <AnimatePresence>
           {images.length > 0 && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="neu-card p-4 mb-5"
@@ -366,7 +366,7 @@ export default function ImageToBase64Page() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {images.map((img) => (
-                  <motion.div
+                  <m.div
                     key={img.id}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -382,7 +382,7 @@ export default function ImageToBase64Page() {
                     >
                       ×
                     </button>
-                  </motion.div>
+                  </m.div>
                 ))}
                 <button
                   onClick={() => fileRef.current?.click()}
@@ -393,14 +393,14 @@ export default function ImageToBase64Page() {
                   </svg>
                 </button>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
 
         {/* Selected image details + output */}
         <AnimatePresence mode="wait">
           {current && (
-            <motion.div
+            <m.div
               key={current.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -471,7 +471,7 @@ export default function ImageToBase64Page() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

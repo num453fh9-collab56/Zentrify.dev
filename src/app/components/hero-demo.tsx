@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
 type Demo = {
@@ -76,9 +76,9 @@ function JsonDemo({ text, done }: { text: string; done: boolean }) {
         <p className="text-[11px] uppercase tracking-wider text-muted mb-3">TypeScript</p>
         <pre className="font-mono text-[13px] leading-6 whitespace-pre text-foreground">
           {tsLines.slice(0, visibleLines).map((line, i) => (
-            <motion.div key={i} initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }}>
+            <m.div key={i} initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }}>
               {line}
-            </motion.div>
+            </m.div>
           ))}
         </pre>
       </div>
@@ -155,7 +155,7 @@ function ColorDemo({ text, done }: { text: string; done: boolean }) {
         <p className="text-[11px] uppercase tracking-wider text-muted mb-2">Palette</p>
         <div className="grid grid-cols-5 gap-2">
           {palette.map((hex, i) => (
-            <motion.div
+            <m.div
               key={hex}
               initial={false}
               animate={{ opacity: done ? 1 : 0.15, y: done ? 0 : 6 }}
@@ -163,7 +163,7 @@ function ColorDemo({ text, done }: { text: string; done: boolean }) {
             >
               <div className="h-14 rounded-lg border border-black/5" style={{ background: hex }} />
               <p className="mt-1.5 font-mono text-[11px] text-muted text-center">{hex}</p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
@@ -237,7 +237,7 @@ export function HeroDemo() {
       </div>
 
       <div className="h-0.5 bg-surface-border/50">
-        <motion.div
+        <m.div
           key={active}
           className="h-full bg-primary/60"
           initial={{ width: "0%" }}

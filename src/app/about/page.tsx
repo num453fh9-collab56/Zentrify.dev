@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const values = [
   {
@@ -46,7 +46,7 @@ export default function AboutPage() {
       
       <div className="max-w-5xl mx-auto">
         {/* Hero */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -69,10 +69,10 @@ export default function AboutPage() {
             A curated collection of free, lightning-fast, browser-based developer and designer utilities.
             <span className="text-foreground font-medium"> No accounts. No tracking. Just tools that work.</span>
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Mission */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6 }}
@@ -103,10 +103,10 @@ export default function AboutPage() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Values */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
@@ -121,7 +121,7 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {values.map((v, i) => (
-              <motion.div
+              <m.div
                 key={v.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -140,13 +140,13 @@ export default function AboutPage() {
                   </h3>
                   <p className="text-sm body-md">{v.desc}</p>
                 </div>
-              </motion.div>
+              </m.div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Stats */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
@@ -159,7 +159,7 @@ export default function AboutPage() {
                 { num: "0", label: "Data Collected", gradient: "from-[#2fb9b3] to-[#8fa98f]" },
                 { num: "100%", label: "Client-Side", gradient: "from-[#8fa98f] to-[#c99bb5]" },
               ].map((s, i) => (
-                <motion.div
+                <m.div
                   key={s.label}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -170,14 +170,14 @@ export default function AboutPage() {
                     {s.num}
                   </div>
                   <div className="text-sm font-medium text-muted">{s.label}</div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Tech Stack */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.6 }}
@@ -192,7 +192,7 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {stack.map((s, i) => (
-              <motion.div
+              <m.div
                 key={s.name}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -204,13 +204,13 @@ export default function AboutPage() {
                 </div>
                 <p className="font-semibold text-sm mb-0.5">{s.name}</p>
                 <p className="text-xs text-muted">{s.desc}</p>
-              </motion.div>
+              </m.div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
 
         {/* CTA */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
@@ -239,7 +239,7 @@ export default function AboutPage() {
               </Link>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

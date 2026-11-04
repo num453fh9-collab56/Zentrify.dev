@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import {
   Braces,
@@ -337,7 +337,7 @@ const categoryLabel = (id: string) => categories.find((c) => c.id === id)?.label
 
 function ToolCard({ tool, index }: { tool: ToolItem; index: number }) {
   return (
-    <motion.div
+    <m.div
       layout
       variants={scaleIn}
       initial="hidden"
@@ -374,7 +374,7 @@ function ToolCard({ tool, index }: { tool: ToolItem; index: number }) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -398,24 +398,24 @@ export default function Home() {
       {/* Hero */}
       <section className="border-b border-surface-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 grid lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-14 items-center">
-          <motion.div initial="hidden" animate="visible" variants={stagger}>
-            <motion.p variants={fadeUp} className="inline-flex items-center gap-2 text-sm font-medium text-muted mb-5">
+          <m.div initial="hidden" animate="visible" variants={stagger}>
+            <m.p variants={fadeUp} className="inline-flex items-center gap-2 text-sm font-medium text-muted mb-5">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               {tools.length} free tools · No signup
-            </motion.p>
+            </m.p>
 
-            <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl lg:text-[3.5rem] heading-xl mb-5">
+            <m.h1 variants={fadeUp} className="text-4xl sm:text-5xl lg:text-[3.5rem] heading-xl mb-5">
               Developer tools
               <br />
               that just work.
-            </motion.h1>
+            </m.h1>
 
-            <motion.p variants={fadeUp} className="text-lg text-muted max-w-md mb-8 body-lg">
+            <m.p variants={fadeUp} className="text-lg text-muted max-w-md mb-8 body-lg">
               Format, convert, test and generate in seconds. Everything runs in your browser, so your data never leaves your device.
-            </motion.p>
+            </m.p>
 
             {/* Hero Search — filters the tools grid below */}
-            <motion.form
+            <m.form
               variants={fadeUp}
               className="max-w-md mb-5"
               onSubmit={(e) => {
@@ -445,9 +445,9 @@ export default function Home() {
                   {filteredTools.length} {filteredTools.length === 1 ? "tool matches" : "tools match"} — press Enter to see {filteredTools.length === 1 ? "it" : "them"}
                 </p>
               )}
-            </motion.form>
+            </m.form>
 
-            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-2 text-[13px]">
+            <m.div variants={fadeUp} className="flex flex-wrap items-center gap-2 text-[13px]">
               <span className="text-muted mr-1">Popular:</span>
               {popularTools.map((t) => (
                 <Link
@@ -458,16 +458,16 @@ export default function Home() {
                   {t.label}
                 </Link>
               ))}
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.25, ease }}
           >
             <HeroDemo />
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
@@ -519,7 +519,7 @@ export default function Home() {
                   {cat.label}
                   <span className="ml-1.5 text-xs text-muted">{count}</span>
                   {isActive && (
-                    <motion.span layoutId="cat-underline" className="absolute left-0 right-0 bottom-0 h-0.5 bg-primary" />
+                    <m.span layoutId="cat-underline" className="absolute left-0 right-0 bottom-0 h-0.5 bg-primary" />
                   )}
                 </button>
               );
@@ -527,16 +527,16 @@ export default function Home() {
           </div>
 
           {/* Tools Grid */}
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <m.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <AnimatePresence mode="popLayout">
               {filteredTools.map((tool, i) => (
                 <ToolCard key={tool.href} tool={tool} index={i} />
               ))}
             </AnimatePresence>
-          </motion.div>
+          </m.div>
 
           {filteredTools.length === 0 && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center py-20"
@@ -551,7 +551,7 @@ export default function Home() {
               >
                 Clear filters
               </button>
-            </motion.div>
+            </m.div>
           )}
         </div>
       </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useToast } from "../../components/toast";
 import { ToolPageHeader } from "../../components/tool-page-header";
 
@@ -343,7 +343,7 @@ export default function HashGeneratorPage() {
 
         {/* Controls bar: encoding + HMAC */}
         {(tab === "text" || tab === "file") && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="neu-card p-4 mb-5">
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="neu-card p-4 mb-5">
             <div className="flex flex-wrap items-center gap-4">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold text-muted">Encoding:</span>
@@ -370,12 +370,12 @@ export default function HashGeneratorPage() {
                 />
               )}
             </div>
-          </motion.div>
+          </m.div>
         )}
 
         {/* TEXT TAB */}
         {tab === "text" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="neu-card p-6 mb-5">
               <label className="text-sm font-medium mb-2 block">Input Text</label>
               <textarea
@@ -409,12 +409,12 @@ export default function HashGeneratorPage() {
                 </div>
               </div>
             )}
-          </motion.div>
+          </m.div>
         )}
 
         {/* FILE TAB */}
         {tab === "file" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div
               className={`neu-card p-8 mb-5 text-center border-2 border-dashed transition-colors cursor-pointer ${dragging ? "border-primary bg-primary/5" : "border-surface-border"}`}
               onDragOver={e => { e.preventDefault(); setDragging(true); }}
@@ -467,12 +467,12 @@ export default function HashGeneratorPage() {
                 </div>
               </div>
             )}
-          </motion.div>
+          </m.div>
         )}
 
         {/* VERIFY TAB */}
         {tab === "verify" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="neu-card p-6 mb-5">
               <label className="text-sm font-medium mb-2 block">Text to Verify</label>
               <textarea
@@ -507,7 +507,7 @@ export default function HashGeneratorPage() {
               Verify Hash
             </button>
             {verifyResult && (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+              <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
                 className={`neu-card p-5 text-center ${verifyResult.match ? "border-2 border-success" : "border-2 border-error"}`}
               >
                 <div className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${verifyResult.match ? "bg-success/10" : "bg-error/10"}`}>
@@ -523,14 +523,14 @@ export default function HashGeneratorPage() {
                 <p className="text-xs text-muted mt-1">
                   {verifyResult.algo ? `Algorithm: ${verifyResult.algo}` : "Could not detect algorithm from hash length"}
                 </p>
-              </motion.div>
+              </m.div>
             )}
-          </motion.div>
+          </m.div>
         )}
 
         {/* BULK TAB */}
         {tab === "bulk" && (
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="neu-card p-6 mb-5">
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-medium">Lines to Hash (one per line)</label>
@@ -600,7 +600,7 @@ export default function HashGeneratorPage() {
                 </div>
               </div>
             )}
-          </motion.div>
+          </m.div>
         )}
 
         {/* Algorithms info */}

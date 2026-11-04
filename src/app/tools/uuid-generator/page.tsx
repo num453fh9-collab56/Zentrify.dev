@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useToast } from "../../components/toast";
 import { ToolPageHeader } from "../../components/tool-page-header";
 
@@ -217,7 +217,7 @@ export default function UUIDGeneratorPage() {
             {/* NanoID specific options */}
             <AnimatePresence>
               {idType === "nanoid" && (
-                <motion.div
+                <m.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
@@ -254,7 +254,7 @@ export default function UUIDGeneratorPage() {
                       <p className="text-xs text-muted mt-1">{nanoidAlpha.length} unique characters</p>
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
 
@@ -320,7 +320,7 @@ export default function UUIDGeneratorPage() {
           </div>
           <div className="space-y-2 max-h-96 overflow-y-auto">
             {formatted.map((id, i) => (
-              <motion.div
+              <m.div
                 key={`${id}-${i}`}
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -337,7 +337,7 @@ export default function UUIDGeneratorPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
                 </button>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
@@ -354,7 +354,7 @@ export default function UUIDGeneratorPage() {
           />
           <AnimatePresence>
             {validation && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
@@ -375,14 +375,14 @@ export default function UUIDGeneratorPage() {
                   <span className="font-semibold">{validation.valid ? validation.type : "Invalid"}</span>
                   {validation.detail && <span className="text-muted ml-1.5">— {validation.detail}</span>}
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
 
         {/* History */}
         {history.length > 0 && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="neu-card p-5"
@@ -415,7 +415,7 @@ export default function UUIDGeneratorPage() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </div>
     </section>

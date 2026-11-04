@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 
 const posts = [
   {
@@ -67,7 +67,7 @@ export default function BlogPage() {
     <section className="py-16 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* Hero */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -89,10 +89,10 @@ export default function BlogPage() {
           <p className="text-lg body-lg max-w-2xl mx-auto">
             Practical articles to help you write better code, build faster UIs, and understand the tools you use every day.
           </p>
-        </motion.div>
+        </m.div>
 
         {/* Category pills */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
@@ -110,10 +110,10 @@ export default function BlogPage() {
               {cat}
             </span>
           ))}
-        </motion.div>
+        </m.div>
 
         {/* Coming soon banner */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.5 }}
@@ -133,12 +133,12 @@ export default function BlogPage() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Post grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {posts.map((post, i) => (
-            <motion.div
+            <m.div
               key={post.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -176,12 +176,12 @@ export default function BlogPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
         {/* Newsletter CTA */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
@@ -210,7 +210,7 @@ export default function BlogPage() {
               </Link>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );
