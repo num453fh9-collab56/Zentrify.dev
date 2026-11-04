@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { m, AnimatePresence } from "framer-motion";
+import { m } from "framer-motion";
 import { useState, useMemo } from "react";
+import dynamic from "next/dynamic";
 import {
   Braces,
   Paintbrush,
@@ -30,8 +31,12 @@ import {
   SearchX,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { HeroDemo } from "./components/hero-demo";
 import { ToolPreview } from "./components/tool-previews";
+
+const HeroDemo = dynamic(
+  () => import("./components/hero-demo").then((mod) => mod.HeroDemo),
+  { ssr: false, loading: () => <div className="h-[310px] rounded-2xl border border-surface-border bg-surface animate-pulse" /> },
+);
 
 const categories = [
   { id: "all", label: "All Tools" },
@@ -338,11 +343,9 @@ const categoryLabel = (id: string) => categories.find((c) => c.id === id)?.label
 function ToolCard({ tool, index }: { tool: ToolItem; index: number }) {
   return (
     <m.div
-      layout
       variants={scaleIn}
       initial="hidden"
       animate="visible"
-      exit="hidden"
       transition={{ delay: index * 0.03 }}
     >
       <Link
@@ -527,13 +530,11 @@ export default function Home() {
           </div>
 
           {/* Tools Grid */}
-          <m.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <AnimatePresence mode="popLayout">
-              {filteredTools.map((tool, i) => (
-                <ToolCard key={tool.href} tool={tool} index={i} />
-              ))}
-            </AnimatePresence>
-          </m.div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredTools.map((tool, i) => (
+              <ToolCard key={tool.href} tool={tool} index={i} />
+            ))}
+          </div>
 
           {filteredTools.length === 0 && (
             <m.div
