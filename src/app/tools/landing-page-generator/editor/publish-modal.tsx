@@ -9,6 +9,7 @@ import {
   Loader2,
   X,
 } from "lucide-react";
+import { useAuth } from "@/app/components/auth-provider";
 
 interface Props {
   defaultSlug: string;
@@ -28,6 +29,7 @@ type PublishState =
   | { step: "done"; url: string; fullUrl: string; editToken: string; id: string };
 
 export function PublishModal({ defaultSlug, defaultTitle, templateId, getHtml, theme, onClose, toast }: Props) {
+  const { user } = useAuth();
   const [slug, setSlug] = useState(defaultSlug);
   const [title, setTitle] = useState(defaultTitle);
   const [state, setState] = useState<PublishState>({ step: "form" });
@@ -56,6 +58,7 @@ export function PublishModal({ defaultSlug, defaultTitle, templateId, getHtml, t
           templateId,
           html: getHtml(),
           theme,
+          ...(user ? { userId: user.id } : {}),
         }),
       });
 

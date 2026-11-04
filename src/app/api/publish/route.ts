@@ -6,7 +6,7 @@ const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,58}[a-z0-9])?$/;
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { slug, title, templateId, html, theme } = body;
+    const { slug, title, templateId, html, theme, userId } = body;
 
     if (!slug || !title || !templateId || !html) {
       return Response.json(
@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
       templateId,
       html,
       theme: theme ?? "stripe-indigo",
+      ...(userId ? { userId } : {}),
     });
 
     return Response.json({
