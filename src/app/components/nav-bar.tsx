@@ -257,6 +257,23 @@ function MobileMenu({ pathname }: { pathname: string }) {
                   </Link>
                 ))}
               </div>
+
+              <div className="mt-2 border-t border-surface-border pt-4 flex gap-3 px-2">
+                <Link
+                  href="/login"
+                  onClick={close}
+                  className="flex-1 h-10 rounded-lg border border-surface-border text-sm font-medium text-foreground flex items-center justify-center hover:bg-surface transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={close}
+                  className="flex-1 h-10 rounded-lg bg-primary text-white text-sm font-medium flex items-center justify-center hover:bg-primary-dark transition-colors"
+                >
+                  Sign up
+                </Link>
+              </div>
             </div>
           </m.nav>
         )}
@@ -283,13 +300,20 @@ function UserMenu() {
 
   if (!user) {
     return (
-      <Link
-        href="/login"
-        className="hidden lg:inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors"
-      >
-        <LogIn className="w-3.5 h-3.5" />
-        Sign in
-      </Link>
+      <div className="hidden lg:flex items-center gap-2">
+        <Link
+          href="/login"
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-sm font-medium text-muted hover:text-foreground transition-colors"
+        >
+          Sign in
+        </Link>
+        <Link
+          href="/signup"
+          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary-dark transition-colors"
+        >
+          Sign up
+        </Link>
+      </div>
     );
   }
 
