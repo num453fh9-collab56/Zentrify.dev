@@ -67,19 +67,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // TODO: Replace with actual email service (Resend, Nodemailer, etc.)
-    // Example with Resend:
-    //
-    // import { Resend } from 'resend';
-    // const resend = new Resend(process.env.RESEND_API_KEY);
-    // await resend.emails.send({
-    //   from: 'Zentrify <noreply@zentrify.com>',
-    //   to: 'your@email.com',
-    //   subject: `Contact from ${name}`,
-    //   text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-    // });
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
-    console.log("[Contact Form]", { name, email, subject, message: message.slice(0, 100) });
+    if (!supabaseUrl || !supabaseKey) {
+      console.log("[Contact Form]", { name, email, subject, message: message.slice(0, 100) });
+      return NextResponse.json({ success: true });
+    }
+
+    const res2 = await fetch(`${supabaseUrl}/rest/v1/contact_messages`, {
+      method: "POST",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({ name, email, subject, message, ip }),
+    });
+
+    if (!res2.ok) {
+      return NextResponse.json(
+        { error: "Failed to save your message. Please try again." },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json({ success: true });
   } catch {
