@@ -134,6 +134,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   <p className="text-sm text-muted leading-relaxed max-w-[240px]">
                     Free developer &amp; designer tools that run in your browser.
                   </p>
+                  <div className="flex items-center gap-3 mt-4">
+                    <a href="mailto:num453fh9@gmail.com" aria-label="Email" className="text-muted hover:text-foreground transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                      </svg>
+                    </a>
+                    <a href="https://x.com/Nomi_ai5656" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="text-muted hover:text-foreground transition-colors">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                      </svg>
+                    </a>
+                  </div>
                 </div>
 
                 {footerLinks.map((group) => (
