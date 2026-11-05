@@ -32,6 +32,8 @@ function useTemplateModules() {
       import("./restaurant-aura-template"),
       import("./luxury-realestate-template"),
       import("./motion-templates"),
+      import("./cinematic-3d-templates"),
+      import("./cinematic-3d-templates-b"),
     ]).then((mods) => {
       setExtra(mods.map((m: TemplateMod) => {
         const key = Object.keys(m).find((k) => Array.isArray(m[k]));
