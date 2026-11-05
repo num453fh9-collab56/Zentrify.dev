@@ -46,12 +46,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, name: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: name } },
     });
     if (error) return { error: error.message };
+    if (data?.user) {
+      fetch("/api/auth/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, provider: "email" }),
+      }).catch(() => {});
+    }
     return { error: null };
   };
 
