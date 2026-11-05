@@ -29,13 +29,20 @@ import {
   Laptop,
   ArrowRight,
   SearchX,
+  Shield,
+  Play,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { ToolPreview } from "./components/tool-previews";
 
-const HeroDemo = dynamic(
-  () => import("./components/hero-demo").then((mod) => mod.HeroDemo),
-  { ssr: false, loading: () => <div className="h-[310px] rounded-2xl border border-surface-border bg-surface animate-pulse" /> },
+const HeroParticles = dynamic(
+  () => import("./components/hero-scene").then((mod) => mod.HeroParticles),
+  { ssr: false },
+);
+
+const FloatingCodeCard = dynamic(
+  () => import("./components/hero-scene").then((mod) => mod.FloatingCodeCard),
+  { ssr: false, loading: () => <div className="w-[370px] h-[340px]" /> },
 );
 
 const categories = [
@@ -314,25 +321,25 @@ const whyFeatures = [
   },
 ];
 
+const featureStrip = [
+  { label: "Developer Tools", Icon: Code2, color: "#a78bda" },
+  { label: "Design Utilities", Icon: Paintbrush, color: "#e868a0" },
+  { label: "Security Tools", Icon: Shield, color: "#34c9a0" },
+  { label: "Converters", Icon: ArrowUpDown, color: "#5ec6c0" },
+  { label: "Text & Data", Icon: FileText, color: "#f5d060" },
+];
+
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.09 } },
 };
 
 const ease = [0.25, 0.46, 0.45, 0.94] as const;
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
 };
-
-
-const popularTools = [
-  { label: "JSON → TS", href: "/tools/json-to-typescript" },
-  { label: "Regex Tester", href: "/tools/regex-tester" },
-  { label: "Password", href: "/tools/password-generator" },
-  { label: "Base64", href: "/tools/base64-encoder" },
-];
 
 const categoryLabel = (id: string) => categories.find((c) => c.id === id)?.label ?? id;
 
@@ -392,83 +399,133 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="border-b border-surface-border">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 grid lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-14 items-center">
-          <m.div initial="hidden" animate="visible" variants={stagger}>
-            <m.p variants={fadeUp} className="inline-flex items-center gap-2 text-sm font-medium text-muted mb-5">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              {tools.length} free tools · No signup
-            </m.p>
+      {/* ═══════ HERO — forced dark, cinematic ═══════ */}
+      <section className="relative overflow-hidden bg-[#060b18]">
+        {/* Atmospheric gradient blobs */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute -top-32 left-[15%] w-[700px] h-[500px] bg-[#a78bda]/[0.07] blur-[140px] rounded-full" />
+          <div className="absolute -bottom-24 right-[10%] w-[600px] h-[400px] bg-[#34c9a0]/[0.05] blur-[120px] rounded-full" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[350px] bg-[#1a2a55]/30 blur-[100px] rounded-full" />
+          {/* Cloud wisps */}
+          <div className="absolute top-[20%] right-[5%] w-[400px] h-[120px] bg-white/[0.015] blur-[60px] rounded-full rotate-[-15deg]" />
+          <div className="absolute bottom-[30%] left-[8%] w-[350px] h-[100px] bg-white/[0.012] blur-[50px] rounded-full rotate-[10deg]" />
+        </div>
 
-            <m.h1 variants={fadeUp} className="text-4xl sm:text-5xl lg:text-[3.5rem] heading-xl mb-5">
-              Developer tools
-              <br />
-              that just work.
-            </m.h1>
+        {/* Particle canvas */}
+        <HeroParticles />
 
-            <m.p variants={fadeUp} className="text-lg text-muted max-w-md mb-8 body-lg">
-              Format, convert, test and generate in seconds. Everything runs in your browser, so your data never leaves your device.
-            </m.p>
+        {/* Hero content */}
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left — text */}
+            <m.div initial="hidden" animate="visible" variants={stagger}>
+              {/* Badge */}
+              <m.div variants={fadeUp}>
+                <span className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#34c9a0]/[0.08] border border-[#34c9a0]/[0.15] text-[#34c9a0] text-xs font-semibold tracking-[0.08em] uppercase mb-7">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#34c9a0] animate-pulse" />
+                  Developer Toolkit
+                </span>
+              </m.div>
 
-            {/* Hero Search — filters the tools grid below */}
-            <m.form
-              variants={fadeUp}
-              className="max-w-md mb-5"
-              onSubmit={(e) => {
-                e.preventDefault();
-                document.getElementById("tools")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
-              <div className="relative group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted group-focus-within:text-foreground transition-colors" />
-                <input
-                  type="search"
-                  aria-label="Search tools"
-                  placeholder='Try "json", "regex", "color"...'
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-11 pr-24 py-3.5 rounded-xl bg-surface border border-surface-border text-foreground placeholder:text-muted focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors cursor-pointer"
-                >
-                  Search
-                </button>
-              </div>
-              {search && (
-                <p className="mt-2 text-[13px] text-muted">
-                  {filteredTools.length} {filteredTools.length === 1 ? "tool matches" : "tools match"} — press Enter to see {filteredTools.length === 1 ? "it" : "them"}
-                </p>
-              )}
-            </m.form>
+              {/* Heading */}
+              <m.h1
+                variants={fadeUp}
+                className="text-4xl sm:text-5xl lg:text-[3.6rem] font-black tracking-[-0.035em] leading-[1.06] text-white mb-6"
+              >
+                A Higher Perspective
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a78bda] via-[#7dd3c0] to-[#34c9a0]">
+                  on Dev Tools.
+                </span>
+              </m.h1>
 
-            <m.div variants={fadeUp} className="flex flex-wrap items-center gap-2 text-[13px]">
-              <span className="text-muted mr-1">Popular:</span>
-              {popularTools.map((t) => (
+              {/* Description */}
+              <m.p
+                variants={fadeUp}
+                className="text-[17px] sm:text-lg text-white/55 max-w-[460px] mb-9 leading-relaxed"
+              >
+                Format, convert, test and generate in seconds. Everything runs
+                in your browser — your data never leaves your device.
+              </m.p>
+
+              {/* CTA Buttons */}
+              <m.div variants={fadeUp} className="flex flex-wrap items-center gap-4 mb-10">
                 <Link
-                  key={t.href}
-                  href={t.href}
-                  className="px-3 py-1 rounded-full border border-surface-border bg-surface text-foreground hover:border-primary/40 hover:text-primary transition-colors"
+                  href="#tools"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById("tools")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="group inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-gradient-to-r from-[#34c9a0] to-[#28ab88] text-white font-semibold text-[15px] shadow-[0_8px_32px_-8px_rgba(52,201,160,0.35)] hover:shadow-[0_12px_40px_-8px_rgba(52,201,160,0.45)] hover:-translate-y-0.5 transition-all"
                 >
-                  {t.label}
+                  Explore Tools
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
-              ))}
-            </m.div>
-          </m.div>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl border border-white/[0.1] text-white/75 font-semibold text-[15px] hover:border-white/[0.2] hover:text-white hover:bg-white/[0.03] transition-all"
+                >
+                  <Play className="w-4 h-4" />
+                  Learn More
+                </Link>
+              </m.div>
 
-          <m.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25, ease }}
-          >
-            <HeroDemo />
-          </m.div>
+              {/* Stats row */}
+              <m.div
+                variants={fadeUp}
+                className="flex items-center gap-6 sm:gap-8"
+              >
+                {[
+                  { value: `${tools.length}+`, label: "Free Tools" },
+                  { value: "0", label: "Signup Required" },
+                  { value: "100%", label: "Client-Side" },
+                ].map((stat, i) => (
+                  <div key={stat.label} className="flex items-center gap-6 sm:gap-8">
+                    {i > 0 && <div className="w-px h-9 bg-white/[0.08] -ml-6 sm:-ml-8" />}
+                    <div>
+                      <span className="text-2xl sm:text-[28px] font-bold text-white tracking-tight">
+                        {stat.value}
+                      </span>
+                      <p className="text-[11px] sm:text-xs text-white/35 mt-0.5 font-medium">
+                        {stat.label}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </m.div>
+            </m.div>
+
+            {/* Right — floating 3D code card */}
+            <m.div
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.35, ease }}
+              className="hidden lg:flex justify-center"
+            >
+              <FloatingCodeCard />
+            </m.div>
+          </div>
+        </div>
+
+        {/* Feature strip */}
+        <div className="relative z-10 border-t border-white/[0.05] bg-white/[0.015] backdrop-blur-md">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center justify-between gap-6 sm:gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-4">
+              {featureStrip.map(({ label, Icon, color }) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-2.5 whitespace-nowrap text-[13px] sm:text-sm text-white/45 font-medium"
+                >
+                  <Icon className="w-4 h-4 shrink-0" style={{ color }} strokeWidth={1.8} />
+                  <span>{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* All Tools with Search & Filter */}
+      {/* ═══════ All Tools with Search & Filter ═══════ */}
       <section id="tools" className="py-20 px-4 sm:px-6 scroll-mt-20">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
@@ -563,7 +620,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Zentrify */}
+      {/* ═══════ Why Zentrify ═══════ */}
       <section className="py-20 px-4 sm:px-6 border-t border-surface-border">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl sm:text-3xl heading-lg mb-2">Why Zentrify</h2>
